@@ -1,66 +1,79 @@
-import React from 'react';
+// src/pages/Home.js
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Home.css'; // Archivo de estilos (lo crearemos después)
+import './Home.css'; // Archivo de estilos
 
 const Home = () => {
+  // Estado para almacenar el plan del usuario
+  const [userPlan, setUserPlan] = useState('basic'); // Puede ser 'basic', 'pro', o 'premium'
+  const [cryptos, setCryptos] = useState([]); // Estado para almacenar las criptomonedas
+
+  // Simulación de datos de criptomonedas
+  const cryptoData = [
+    { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
+    { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
+    { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
+    { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
+    { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
+  ];
+
+  // Simulación de la obtención del plan del usuario desde la base de datos
+  useEffect(() => {
+    // Aquí iría la lógica para obtener el plan del usuario desde la base de datos
+    // Por ahora, lo simulamos con un valor fijo
+    const fetchUserPlan = async () => {
+      // Simulación de una llamada a la API o base de datos
+      const plan = 'basic'; // Cambia a 'pro' o 'premium' para probar otros planes
+      setUserPlan(plan);
+    };
+
+    fetchUserPlan();
+  }, []);
+
+  // Filtra las criptomonedas según el plan del usuario
+  useEffect(() => {
+    if (userPlan === 'basic') {
+      setCryptos(cryptoData.slice(0, 3)); // Muestra solo 3 criptomonedas
+    } else if (userPlan === 'pro') {
+      setCryptos(cryptoData.slice(0, 10)); // Muestra 10 criptomonedas
+    } else if (userPlan === 'premium') {
+      setCryptos(cryptoData); // Muestra todas las criptomonedas
+    }
+  }, [userPlan]);
+
   return (
     <div className="home-container">
-      <img src="CoinDunkNB.png" alt="Logo" width="220" height="200"></img>
       <h1>Bienvenido a CoinDunk</h1>
       <p className="description">
-        Predice el futuro de las criptomonedas con nuestros planes de suscripción.
+        Predice el futuro de las criptomonedas con nuestro plan {userPlan}.
       </p>
 
-      <div className="plans-container">
-      {/* Plan Básico */}
-      <div className="plan-card">
-        <h2>Básico</h2>
-        <p className="price">50€ <span>Cada mes</span></p>
-        <p className="description">
-          Ideal para quienes se inician en este mundo o prefieren enfocarse en monedas específicas.
-        </p>
-        <p className="trial">7 días de prueba gratuita</p>
-        <ul>
-          <li>Accede a predicciones de 3 criptomonedas de tu elección</li>
-        </ul>
-        <Link to="/prediction-basic" className="plan-button">
-          Seleccionar Plan Básico
-        </Link>
+      {/* Mostrar las criptomonedas */}
+      <div className="crypto-grid">
+        {cryptos.map((crypto) => (
+          <div key={crypto.id} className="crypto-card">
+            <h2>{crypto.name} ({crypto.symbol})</h2>
+            <p>Precio: ${crypto.price.toLocaleString()}</p>
+            <p>Cambio: <span className={crypto.change.includes('+') ? 'positive' : 'negative'}>
+              {crypto.change}
+            </span></p>
+          </div>
+        ))}
       </div>
 
-      {/* Plan Pro */}
-      <div className="plan-card">
-        <h2>Dunk Pro</h2>
-        <p className="price">100€ <span>Cada mes</span></p>
-        <p className="description">
-          Perfecto si buscas diversificar tu cartera y conocer más oportunidades de inversión.
-        </p>
-        <ul>
-          <li>Recibe predicciones de 10 criptomonedas</li>
-        </ul>
-        <Link to="/prediction-pro" className="plan-button">
-          Seleccionar Dunk Pro
-        </Link>
-      </div>
-
-      {/* Plan Premium */}
-      <div className="plan-card">
-        <h2>Slam Dunk</h2>
-        <p className="price">250€ <span>Cada mes</span></p>
-        <p className="description">
-          Para los que no temen clavar la máxima jugada. Incluye ventajas exclusivas adicionales para llevar tus estrategias de inversión al siguiente nivel.
-        </p>
-        <ul>
-          <li>Disfruta de acceso ilimitado a todas las criptomonedas</li>
-          <li>Sé parte del nuevo proyecto CoinDunk</li>
-        </ul>
-        <Link to="/prediction-premium" className="plan-button">
-          Seleccionar Slam Dunk
-        </Link>
-      </div>
-    </div>
+      {/* Comentario para criptomonedas no incluidas en el plan básico */}
+      {userPlan === 'basic' && (
+        <div className="upgrade-message">
+          <p>
+            ¿Quieres ver más criptomonedas?{' '}
+            <Link to="/planes" className="upgrade-link">
+              Actualiza tu plan
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
-}; 
+};
 
 export default Home;

@@ -29,9 +29,9 @@ const Navbar = () => {
             sx={{
               color: '#fff',
               textTransform: 'none',
-              fontSize: '0.875rem', // Coma añadida aquí
+              fontSize: '0.875rem',
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)', // Efecto hover sutil
               },
             }}
           >
@@ -40,11 +40,10 @@ const Navbar = () => {
           <Button
             component={Link}
             to="/planes"
-        
             sx={{
               color: '#fff',
               textTransform: 'none',
-              fontSize: '0.875rem', // Coma añadida aquí
+              fontSize: '0.875rem',
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
               },
@@ -54,11 +53,11 @@ const Navbar = () => {
           </Button>
           <Button
             component={Link}
-            to="/contact"
+            to="/about"
             sx={{
               color: '#fff',
               textTransform: 'none',
-              fontSize: '0.875rem', // Coma añadida aquí
+              fontSize: '0.875rem',
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
               },
@@ -72,7 +71,7 @@ const Navbar = () => {
             sx={{
               color: '#fff',
               textTransform: 'none',
-              fontSize: '0.875rem', // Coma añadida aquí
+              fontSize: '0.875rem',
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
               },

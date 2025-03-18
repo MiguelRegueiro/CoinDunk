@@ -1,11 +1,17 @@
-// src/pages/Planes.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Planes.css'; // Archivo de estilos (opcional)
+import './Planes.css'; // Archivo de estilos (lo crearemos después)
 
-const Planes = () => {
+const Home = () => {
   return (
-    <div className="plans-container">
+    <div className="home-container">
+      <img src="CoinDunkNB.png" alt="Logo" width="220" height="200"></img>
+      <h1>Bienvenido a CoinDunk</h1>
+      <p className="description">
+        Predice el futuro de las criptomonedas con nuestros planes de suscripción.
+      </p>
+
+      <div className="plans-container">
       {/* Plan Básico */}
       <div className="plan-card">
         <h2>Básico</h2>
@@ -53,7 +59,8 @@ const Planes = () => {
         </Link>
       </div>
     </div>
+    </div>
   );
-};
+}; 
 
-export default Planes;
+export default Home;

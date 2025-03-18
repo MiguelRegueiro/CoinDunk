@@ -1,12 +1,4 @@
-/* Estilos generales */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
-
+/* src/pages/Home.css */
 .home-container {
   text-align: center;
   padding: 20px;
@@ -18,116 +10,65 @@ body {
   margin-bottom: 20px;
 }
 
-.description {
+.home-container .description {
   font-size: 1.2rem;
   color: #666;
   margin-bottom: 40px;
 }
 
-/* Estilos para los planes */
-.plans-container {
-  display: flex;
-  justify-content: center;
+.crypto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  flex-wrap: wrap;
+  padding: 20px;
 }
 
-.plan-card {
+.crypto-card {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 300px;
+  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.plan-card:hover {
-  transform: translateY(-10px);
+.crypto-card:hover {
+  transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.plan-card h2 {
-  font-size: 1.8rem;
-  color: #2c3e50;
-  margin-bottom: 15px;
-}
-
-.plan-card p {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.plan-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 20px;
-}
-
-.plan-card ul li {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.plan-button {
-  display: inline-block;
-  background-color: #faa226;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.plan-button:hover {
-  background-color: #C8821E;
-}
-
-/* Estilos para el logo */
-.home-container img {
-  margin-bottom: 20px;
-}
-
-/* Estilos para el precio */
-.price {
-  font-size: 1.8rem;
-  font-weight: bold;
+.crypto-card h2 {
+  font-size: 1.5rem;
   color: #2c3e50;
   margin-bottom: 10px;
 }
 
-.price span {
+.crypto-card p {
   font-size: 1rem;
-  font-weight: normal;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.positive {
+  color: #2ecc71; /* Verde para cambios positivos */
+}
+
+.negative {
+  color: #e74c3c; /* Rojo para cambios negativos */
+}
+
+.upgrade-message {
+  margin-top: 30px;
+  font-size: 1rem;
   color: #666;
 }
 
-/* Estilos para la descripción del plan */
-.plan-card .description {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 15px;
-}
-
-/* Estilos para el texto de prueba gratuita */
-.trial {
-  font-size: 0.9rem;
+.upgrade-link {
   color: #3498db;
+  text-decoration: none;
   font-weight: bold;
-  margin-bottom: 15px;
 }
 
-/* Estilos para la lista de características */
-.plan-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 20px;
-}
-
-.plan-card ul li {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
+.upgrade-link:hover {
+  text-decoration: underline;
 }
