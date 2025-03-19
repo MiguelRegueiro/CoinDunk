@@ -101,7 +101,7 @@ const Navbar = () => {
           </Button>
           <Button
             component={Link}
-            to="/contact"
+            to="/contacto"
             sx={{
               color: '#fff',
               textTransform: 'none',

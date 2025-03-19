@@ -4,16 +4,16 @@
   padding: 40px 20px;
   min-height: 100vh;
   font-family: 'Arial', sans-serif;
-  backgroundColor: theme.colors.background,
+  background-color: inherit; /* Hereda el color de fondo del body */
 }
 
 .logo {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .description {
@@ -101,7 +101,7 @@ h1 {
   width: 100%;
   max-width: 200px;
   text-align: center;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 
 /* Estilos para el tema claro */

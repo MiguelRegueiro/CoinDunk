@@ -18,6 +18,8 @@ const Planes = () => {
         color: theme.colors.text, // Texto dinámico
       }}
     >
+      <br />
+    
       <img
         src="CoinDunkNB.png"
         alt="Logo"
