@@ -1,11 +1,10 @@
-// src/pages/About.js
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { ThemeContext } from '../context/Theme'; // Importa el contexto del tema
-import './About.css'; // Archivo de estilos
+import { ThemeContext } from '../context/Theme';
+import './About.css';
 
 const About = () => {
-  const theme = useContext(ThemeContext); // Accede al tema
+  const theme = useContext(ThemeContext);
 
   return (
     <div
@@ -18,10 +17,12 @@ const About = () => {
       {/* Encabezado con logo y nombre */}
       <div className="header">
         <div className="header-content">
-        <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
-        <h1 className="app-name">CoinDunk</h1>
+          <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logo" />
+          <h1 className="app-name" style={{ color: theme.colors.text }}>
+            CoinDunk
+          </h1>
+        </div>
       </div>
-    </div>
 
       {/* Contenido de la página About */}
       <div
@@ -60,17 +61,6 @@ const About = () => {
           </a>
           .
         </p>
-      </div>
-
-      {/* Enlace para volver a la página de inicio */}
-      <div className="back-to-home">
-        <Link
-          to="/"
-          className="back-link"
-          style={{ color: theme.colors.link }}
-        >
-          Volver a Inicio
-        </Link>
       </div>
     </div>
   );
