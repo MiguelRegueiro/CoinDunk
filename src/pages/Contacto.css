@@ -17,7 +17,7 @@
   
   .contacto-header p {
     font-size: 1.2rem;
-    color: #fff;
+    color: #666;
   }
   
   .contacto-content {
@@ -29,7 +29,7 @@
   }
   
   .contacto-info, .contacto-form, .contacto-mapa {
-    background-color: var(--card-background, #f9f9f9, #2d2d2d);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

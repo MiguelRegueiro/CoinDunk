@@ -1,12 +1,13 @@
 // src/pages/Home.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { ThemeContext } from '../context/Theme'; // Importa el contexto del tema
 import './Home.css'; // Archivo de estilos
 
 const Home = () => {
-  // Estado para almacenar el plan del usuario
   const [userPlan, setUserPlan] = useState('basic'); // Puede ser 'basic', 'pro', o 'premium'
   const [cryptos, setCryptos] = useState([]); // Estado para almacenar las criptomonedas
+  const theme = useContext(ThemeContext); // Accede al tema
 
   // Simulación de datos de criptomonedas
   const cryptoData = [
@@ -19,10 +20,7 @@ const Home = () => {
 
   // Simulación de la obtención del plan del usuario desde la base de datos
   useEffect(() => {
-    // Aquí iría la lógica para obtener el plan del usuario desde la base de datos
-    // Por ahora, lo simulamos con un valor fijo
     const fetchUserPlan = async () => {
-      // Simulación de una llamada a la API o base de datos
       const plan = 'basic'; // Cambia a 'pro' o 'premium' para probar otros planes
       setUserPlan(plan);
     };
@@ -41,32 +39,52 @@ const Home = () => {
     }
   }, [userPlan]);
 
+  if (!theme) {
+    return <div>Cargando...</div>; // Muestra un mensaje de carga si el tema no está disponible
+  }
+
   return (
-    <div className="home-container">
-      <h1>Bienvenido a CoinDunk</h1>
-      <p className="description">
+    <div
+      className="home-container"
+      style={{
+        backgroundColor: theme.colors.background, // Fondo dinámico
+        color: theme.colors.text, // Texto dinámico
+      }}
+    >
+      <h1 style={{ color: theme.colors.primary }}>Bienvenido a CoinDunk</h1>
+      <p className="description" style={{ color: theme.colors.secondaryText }}>
         Predice el futuro de las criptomonedas con nuestro plan {userPlan}.
       </p>
 
       {/* Mostrar las criptomonedas */}
       <div className="crypto-grid">
         {cryptos.map((crypto) => (
-          <div key={crypto.id} className="crypto-card">
-            <h2>{crypto.name} ({crypto.symbol})</h2>
+          <div
+            key={crypto.id}
+            className="crypto-card"
+            style={{
+              backgroundColor: theme.colors.cardBackground, // Fondo dinámico para tarjetas
+              color: theme.colors.text, // Texto dinámico
+            }}
+          >
+            <h2 style={{ color: theme.colors.primary }}>{crypto.name} ({crypto.symbol})</h2>
             <p>Precio: ${crypto.price.toLocaleString()}</p>
-            <p>Cambio: <span className={crypto.change.includes('+') ? 'positive' : 'negative'}>
-              {crypto.change}
-            </span></p>
+            <p>
+              Cambio:{' '}
+              <span className={crypto.change.includes('+') ? 'positive' : 'negative'}>
+                {crypto.change}
+              </span>
+            </p>
           </div>
         ))}
       </div>
 
       {/* Comentario para criptomonedas no incluidas en el plan básico */}
       {userPlan === 'basic' && (
-        <div className="upgrade-message">
+        <div className="upgrade-message" style={{ color: theme.colors.secondaryText }}>
           <p>
             ¿Quieres ver más criptomonedas?{' '}
-            <Link to="/planes" className="upgrade-link">
+            <Link to="/planes" className="upgrade-link" style={{ color: theme.colors.link }}>
               Actualiza tu plan
             </Link>
           </p>
