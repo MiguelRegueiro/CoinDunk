@@ -18,20 +18,22 @@ const Planes = () => {
         color: theme.colors.text, // Texto dinámico
       }}
     >
-      <br/>
-    
-      <img
-        src="CoinDunkNB.png"
-        alt="Logo"
-        width="220"
-        height="200"
-        className="logo"
-      />
-      <h1>Bienvenido a CoinDunk</h1>
-      <p className="description">
-        Predice el futuro de las criptomonedas con nuestros planes de suscripción.
-      </p>
+      {/* Encabezado con logo y texto */}
+      <div className="header">
+        <img
+          src="CoinDunkNB.png"
+          alt="Logo"
+          className="logo-planes" // Clase específica para el logo en Planes
+        />
+        <div className="header-text">
+          <h1>Bienvenido a CoinDunk</h1>
+          <p className="description">
+            Predice el futuro de las criptomonedas con nuestros planes de suscripción.
+          </p>
+        </div>
+      </div>
 
+      {/* Grid de planes */}
       <div className="plans-grid">
         {/* Plan Básico */}
         <div
