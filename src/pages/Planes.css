@@ -34,7 +34,7 @@ h1 {
 .plan-card {
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   padding: 20px;
   width: 300px;
   text-align: left;
@@ -111,6 +111,7 @@ h1 {
   width: 100%;
   max-width: 200px; /* Ancho máximo para los botones */
   text-align: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .plan-button:hover {
