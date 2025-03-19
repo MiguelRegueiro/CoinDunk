@@ -18,7 +18,7 @@ const Planes = () => {
         color: theme.colors.text, // Texto dinámico
       }}
     >
-      <br />
+      <br/>
     
       <img
         src="CoinDunkNB.png"
