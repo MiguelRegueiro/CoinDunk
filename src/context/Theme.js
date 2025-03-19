@@ -1,4 +1,3 @@
-// src/context/Theme.js
 import React, { createContext, useState, useEffect } from 'react';
 
 // Crear el contexto para el tema
@@ -27,14 +26,29 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     colors: {
-      background: isDarkMode ? '#1e1e1e' : '#ffffff', // Fondo oscuro o claro
-      text: isDarkMode ? '#e0e0e0' : '#000000', // Texto claro u oscuro
-      primary: isDarkMode ? '#e49a05' : '#e67e22', // Color naranja oscuro o claro
-      secondary: isDarkMode ? '#03dac6' : '#03dac6', // Color secundario (se mantiene igual)
-      cardBackground: isDarkMode ? '#2d2d2d' : '#f9f9f9', // Fondo de tarjetas oscuro o claro
+      // Fondos
+      background: isDarkMode ? '#121212' : '#f5f5f5', // Fondo oscuro o claro
+      cardBackground: isDarkMode ? '#1e1e1e' : '#ffffff', // Fondo de tarjetas oscuro o claro
+
+      // Textos
+      text: isDarkMode ? '#e0e0e0' : '#333333', // Texto claro u oscuro
+      textSecondary: isDarkMode ? '#b0b0b0' : '#666666', // Texto secundario
+
+      // Colores primarios y secundarios
+      primary: isDarkMode ? '#ffa726' : '#e67e22', // Naranja principal
+      primaryHover: isDarkMode ? '#fb8c00' : '#d35400', // Naranja más oscuro al hacer hover
+      secondary: isDarkMode ? '#03dac6' : '#00bcd4', // Color secundario (turquesa)
+      secondaryHover: isDarkMode ? '#00bcd4' : '#0097a7', // Turquesa más oscuro al hacer hover
+
+      // Bordes
       border: isDarkMode ? '#444' : '#ddd', // Bordes más sutiles
-      button: isDarkMode ? '#da7319' : '#e67e22', // Botón naranja oscuro o claro
-      buttonHover: isDarkMode ? '#d05c0f' : '#d35400', // Botón naranja más oscuro al hacer hover
+
+      // Botones
+      button: isDarkMode ? '#ffa726' : '#e67e22', // Botón naranja
+      buttonHover: isDarkMode ? '#fb8c00' : '#d35400', // Botón naranja más oscuro al hacer hover
+
+      // Sombras
+      shadow: isDarkMode ? '0 4px 12px rgba(0, 0, 0, 0.3)' : '0 4px 12px rgba(0, 0, 0, 0.1)',
     },
   };
 

@@ -1,29 +1,51 @@
-/* src/index.css */
+/* Estilos globales para el tema claro y oscuro */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Estilos para el tema claro y oscuro */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
-  background-color: var(--body-background, #ffffff); /* Fondo claro por defecto */
-  color: var(--body-text, #000000); /* Texto oscuro por defecto */
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.dark-mode {
-  --body-background: #1e1e1e; /* Fondo oscuro */
-  --body-text: #e0e0e0; /* Texto claro */
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Estilos para enlaces */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #ffa726; /* Naranja principal */
+}
+
+/* Estilos para botones */
+button {
+  background-color: #e67e22; /* Naranja principal */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d35400; /* Naranja más oscuro al hacer hover */
+}
+
+/* Estilos para tarjetas */
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
