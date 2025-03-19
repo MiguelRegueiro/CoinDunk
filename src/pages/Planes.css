@@ -2,9 +2,9 @@
 .planes-container {
   text-align: center;
   padding: 40px 20px;
-  background-color: #f9f9f9;
   min-height: 100vh;
-  font-family: 'Arial', sans-serif; /* Fuente anterior */
+  font-family: 'Arial', sans-serif;
+  backgroundColor: theme.colors.background,
 }
 
 .logo {
@@ -13,13 +13,11 @@
 
 h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
   margin-bottom: 20px;
 }
 
 .description {
   font-size: 1.2rem;
-  color: #666;
   margin-bottom: 40px;
 }
 
@@ -32,7 +30,6 @@ h1 {
 }
 
 .plan-card {
-  background-color: #fff;
   border-radius: 10px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   padding: 20px;
@@ -50,33 +47,28 @@ h1 {
 
 .plan-card h2 {
   font-size: 1.8rem;
-  color: #2c3e50;
   margin-bottom: 15px;
 }
 
 .price {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #e67e22; /* Color naranja */
   margin-bottom: 10px;
 }
 
 .price span {
   font-size: 1rem;
   font-weight: normal;
-  color: #666;
 }
 
 .plan-description {
   font-size: 1rem;
-  color: #666;
   text-align: justify;
   margin-bottom: 15px;
 }
 
 .trial {
   font-size: 0.9rem;
-  color: #e67e22; /* Color naranja */
   font-weight: bold;
   margin-bottom: 15px;
 }
@@ -89,31 +81,45 @@ h1 {
 
 .plan-card ul li {
   font-size: 0.9rem;
-  color: #666;
   margin-bottom: 10px;
 }
 
 .button-container {
-  margin-top: auto; /* Empuja el botón hacia abajo */
+  margin-top: auto;
   display: flex;
-  justify-content: center; /* Centra el botón horizontalmente */
+  justify-content: center;
 }
 
+/* src/pages/Planes.css */
 .plan-button {
   display: inline-block;
-  background-color: #e67e22; /* Color naranja */
-  color: #fff;
   padding: 10px 20px;
   border-radius: 5px;
   text-decoration: none;
   font-size: 1rem;
   transition: background-color 0.3s ease;
   width: 100%;
-  max-width: 200px; /* Ancho máximo para los botones */
+  max-width: 200px;
   text-align: center;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-.plan-button:hover {
-  background-color: #d35400; /* Naranja más oscuro al hacer hover */
+/* Estilos para el tema claro */
+.light-mode .plan-button {
+  background-color: #e67e22 !important; /* Color naranja */
+  color: #fff !important; /* Texto blanco */
+}
+
+.light-mode .plan-button:hover {
+  background-color: #d35400 !important; /* Naranja más oscuro al hacer hover */
+}
+
+/* Estilos para el tema oscuro */
+.dark-mode .plan-button {
+  background-color: #da7319 !important; /* Color primario del tema oscuro */
+  color: #fff !important; /* Texto blanco */
+}
+
+.dark-mode .plan-button:hover {
+  background-color: #d05c0f !important; /* Color primario más oscuro al hacer hover */
 }

@@ -1,3 +1,4 @@
+/* src/index.css */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +11,19 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Estilos para el tema claro y oscuro */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background-color: var(--body-background, #ffffff); /* Fondo claro por defecto */
+  color: var(--body-text, #000000); /* Texto oscuro por defecto */
+}
+
+body.dark-mode {
+  --body-background: #1e1e1e; /* Fondo oscuro */
+  --body-text: #e0e0e0; /* Texto claro */
 }
