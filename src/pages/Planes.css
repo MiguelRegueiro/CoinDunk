@@ -1,64 +1,140 @@
 /* src/pages/Planes.css */
-.plans-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .plan-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .plan-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .price {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 10px;
-  }
-  
-  .price span {
-    font-size: 1rem;
-    font-weight: normal;
-    color: #666;
-  }
-  
-  .description {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 15px;
-  }
-  
-  .trial {
-    font-size: 0.9rem;
-    color: #f9a225;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  
-  .plan-button {
-    display: inline-block;
-    background-color: #f9a225;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .plan-button:hover {
-    background-color: #f9a225;
-  }
+.planes-container {
+  text-align: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: inherit; /* Hereda el color de fondo del body */
+}
+
+/* Encabezado con logo y texto */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Espacio entre el logo y el texto */
+  margin-bottom: 40px;
+}
+
+/* Clase específica para el logo en Planes */
+.logo-planes {
+  width: 220px; /* Ancho fijo */
+  height: 200px; /* Alto fijo */
+}
+
+.header-text {
+  text-align: left;
+}
+
+.header-text h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.header-text .description {
+  font-size: 1.2rem;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+/* Grid de planes */
+.plans-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.plan-card {
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  padding: 20px;
+  width: 300px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.plan-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.price span {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.plan-description {
+  font-size: 1rem;
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
+.trial {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.plan-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.plan-card ul li {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.plan-button {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+/* Estilos para el tema claro */
+.light-mode .plan-button {
+  background-color: #e67e22 !important; /* Color naranja */
+  color: #fff !important; /* Texto blanco */
+}
+
+.light-mode .plan-button:hover {
+  background-color: #d35400 !important; /* Naranja más oscuro al hacer hover */
+}
+
+/* Estilos para el tema oscuro */
+.dark-mode .plan-button {
+  background-color: #da7319 !important; /* Color primario del tema oscuro */
+  color: #fff !important; /* Texto blanco */
+}
+
+.dark-mode .plan-button:hover {
+  background-color: #d05c0f !important; /* Color primario más oscuro al hacer hover */
+}

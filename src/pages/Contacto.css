@@ -1,0 +1,123 @@
+/* src/pages/Contacto.css */
+.contacto-container {
+  padding: 40px 20px;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: inherit; /* Hereda el color de fondo del tema */
+}
+
+.contacto-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contacto-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+.contacto-header p {
+  font-size: 1.2rem;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+.contacto-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contacto-info, .contacto-form, .contacto-mapa {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: inherit; /* Hereda el color de fondo del tema */
+  border: 1px solid var(--border-color); /* Borde dinámico */
+}
+
+.contacto-info h2, .contacto-form h2, .contacto-mapa h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+.contacto-info p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+.contacto-form .form-group {
+  margin-bottom: 20px;
+}
+
+.contacto-form label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: inherit; /* Hereda el color del texto del tema */
+}
+
+.contacto-form input, .contacto-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color); /* Borde dinámico */
+  border-radius: 5px;
+  background-color: var(--input-background); /* Fondo dinámico para inputs */
+  color: var(--input-text); /* Texto dinámico para inputs */
+}
+
+.contacto-form textarea {
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: var(--button-color); /* Color dinámico del botón */
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--button-hover); /* Color dinámico del botón al hacer hover */
+}
+
+.contacto-mapa iframe {
+  border-radius: 10px;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .contacto-content {
+    flex-direction: column;
+  }
+
+  .contacto-info, .contacto-form, .contacto-mapa {
+    width: 100%;
+  }
+}
+
+/* Variables CSS para temas */
+:root {
+  --border-color: #ddd; /* Borde claro por defecto */
+  --input-background: #fff; /* Fondo claro para inputs por defecto */
+  --input-text: #000; /* Texto oscuro para inputs por defecto */
+  --button-color: #e67e22; /* Color naranja para botón por defecto */
+  --button-hover: #d35400; /* Color naranja oscuro para botón al hacer hover por defecto */
+}
+
+[data-theme="dark"] {
+  --border-color: #444; /* Borde oscuro */
+  --input-background: #2d2d2d; /* Fondo oscuro para inputs */
+  --input-text: #e0e0e0; /* Texto claro para inputs */
+  --button-color: #da7319; /* Color naranja oscuro para botón */
+  --button-hover: #d05c0f; /* Color naranja más oscuro para botón al hacer hover */
+}
