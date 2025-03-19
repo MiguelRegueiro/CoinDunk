@@ -69,7 +69,7 @@ const Navbar = () => {
               },
             }}
           >
-            Inicio
+            Predicciones
           </Button>
           <Button
             component={Link}
