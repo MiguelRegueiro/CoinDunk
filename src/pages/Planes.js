@@ -51,11 +51,10 @@ const Planes = () => {
           <h2>Slam Dunk</h2>
           <p className="price">250€ <span>Cada mes</span></p>
           <p className="plan-description">
-            Para los que no temen clavar la máxima jugada. Incluye ventajas exclusivas adicionales para llevar tus estrategias de inversión al siguiente nivel.
+            Incluye ventajas exclusivas adicionales para llevar tus estrategias de inversión al siguiente nivel.
           </p>
           <ul>
-            <li>Disfruta de acceso ilimitado a todas las criptomonedas</li>
-            <li>Sé parte del nuevo proyecto CoinDunk</li>
+            <li>Disfruta de acceso ilimitado a más de 100 criptomonedas</li>
           </ul>
           <div className="button-container">
             <Link to="/prediction-premium" className="plan-button">
