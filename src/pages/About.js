@@ -17,11 +17,11 @@ const About = () => {
     >
       {/* Encabezado con logo y nombre */}
       <div className="header">
-        <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logo" />
-        <h1 className="app-name" style={{ color: theme.colors.primary }}>
-          CoinDunk
-        </h1>
+        <div className="header-content">
+        <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
+        <h1 className="app-name">CoinDunk</h1>
       </div>
+    </div>
 
       {/* Contenido de la página About */}
       <div

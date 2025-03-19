@@ -153,9 +153,12 @@ const Home = () => {
     >
       {/* Encabezado con logo y nombre */}
       <div className="header">
+        <div className="header-content">
         <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
         <h1 className="app-name">Home</h1>
       </div>
+    </div>
+
 
       {/* Gráfico de la criptomoneda seleccionada */}
       <div className="chart-container">

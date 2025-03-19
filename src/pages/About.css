@@ -11,6 +11,13 @@
     justify-content: center;
     margin-bottom: 40px;
   }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Reduce el espacio */
+  }
+  
   
   .logo {
     width: 60px;

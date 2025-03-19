@@ -8,9 +8,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px; /* Reduce el espacio entre el logo y el texto */
   margin-bottom: 20px;
   margin-top: 50px;
 }
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Reduce el espacio */
+}
+
+
+.logohome {
+  width: 50px;
+  height: 50px;
+  margin-right: 0; /* Elimina el margen derecho */
+}
+
 
 .logohome {
   width: 50px;
