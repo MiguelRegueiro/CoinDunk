@@ -70,22 +70,22 @@ const Home = () => {
     setTimeRange(range);
   };
 
-  // Datos simulados para el gráfico
+  // Datos simulados para el gráfico según el rango de tiempo
   const getChartData = () => {
     let labels = [];
     let data = [];
 
     switch (timeRange) {
-      case '1D':
-        labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'];
+      case '1D': // Predicciones para 1 día
+        labels = ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7'];
         data = [41000, 41500, 42000, 41800, 42200, 42500, 43000];
         break;
-      case '1W':
-        labels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+      case '1W': // Predicciones para 1 semana
+        labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7'];
         data = [40000, 40500, 41000, 41500, 42000, 42500, 43000];
         break;
-      case '1M':
-        labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'];
+      case '1M': // Predicciones para 1 mes
+        labels = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4'];
         data = [38000, 39000, 40000, 42000];
         break;
       default:
@@ -97,9 +97,9 @@ const Home = () => {
       labels,
       datasets: [
         {
-          label: `Precio de ${selectedCrypto}`,
+          label: `Predicción de precio para ${selectedCrypto}`,
           data,
-          borderColor: theme.colors.primary, // Color dinámico del tema
+          borderColor: theme.colors.primary,
           backgroundColor: theme.isDarkMode ? 'rgba(255, 165, 0, 0.1)' : 'rgba(230, 126, 34, 0.1)',
           fill: true,
           tension: 0.4,
@@ -116,35 +116,35 @@ const Home = () => {
       legend: {
         position: 'top',
         labels: {
-          color: theme.colors.text, // Color dinámico del texto
+          color: theme.colors.text,
         },
       },
       title: {
         display: true,
-        text: `Gráfico de ${selectedCrypto} (${timeRange})`,
-        color: theme.colors.text, // Color dinámico del texto
+        text: `Predicción de precios para ${selectedCrypto} (${timeRange})`,
+        color: theme.colors.text,
       },
       tooltip: {
-        backgroundColor: theme.colors.cardBackground, // Fondo dinámico
-        titleColor: theme.colors.text, // Color dinámico del texto
-        bodyColor: theme.colors.text, // Color dinámico del texto
+        backgroundColor: theme.colors.cardBackground,
+        titleColor: theme.colors.text,
+        bodyColor: theme.colors.text,
       },
     },
     scales: {
       x: {
         grid: {
-          color: theme.colors.border, // Color dinámico de la cuadrícula
+          color: theme.colors.border,
         },
         ticks: {
-          color: theme.colors.text, // Color dinámico del texto
+          color: theme.colors.text,
         },
       },
       y: {
         grid: {
-          color: theme.colors.border, // Color dinámico de la cuadrícula
+          color: theme.colors.border,
         },
         ticks: {
-          color: theme.colors.text, // Color dinámico del texto
+          color: theme.colors.text,
         },
       },
     },
@@ -166,12 +166,15 @@ const Home = () => {
       <div className="header">
         <div className="header-content">
           <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
-          <h1 className="app-name">Predicciones</h1>
+          <h1 className="app-name">Predicciones de Criptomonedas</h1>
         </div>
       </div>
 
       {/* Gráfico de la criptomoneda seleccionada */}
       <div className="chart-container">
+        <h2 style={{ color: theme.colors.primary }}>
+          Predicciones de precios para {selectedCrypto}
+        </h2>
         <div className="chart-wrapper">
           <Line data={getChartData()} options={chartOptions} height={300} />
         </div>
@@ -189,10 +192,13 @@ const Home = () => {
               }}
               onClick={() => handleTimeRangeChange(range)}
             >
-              {range}
+              {range === '1D' ? '1 Día' : range === '1W' ? '1 Semana' : '1 Mes'}
             </button>
           ))}
         </div>
+        <p style={{ color: theme.colors.secondaryText, marginTop: '10px' }}>
+          Los datos mostrados son predicciones simuladas basadas en modelos avanzados.
+        </p>
       </div>
 
       {/* Selector de criptomonedas */}
