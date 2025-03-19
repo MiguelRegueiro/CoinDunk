@@ -27,14 +27,14 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     colors: {
-      background: isDarkMode ? '#1e1e1e' : '#ffffff',
-      text: isDarkMode ? '#e0e0e0' : '#000000',
-      primary: isDarkMode ? '#bb86fc' : '#6200ee', // Color primario
-      secondary: isDarkMode ? '#03dac6' : '#03dac6', // Color secundario
-      cardBackground: isDarkMode ? '#2d2d2d' : '#f9f9f9', // Fondo de tarjetas
+      background: isDarkMode ? '#1e1e1e' : '#ffffff', // Fondo oscuro o claro
+      text: isDarkMode ? '#e0e0e0' : '#000000', // Texto claro u oscuro
+      primary: isDarkMode ? '#da7319' : '#e67e22', // Color naranja oscuro o claro
+      secondary: isDarkMode ? '#03dac6' : '#03dac6', // Color secundario (se mantiene igual)
+      cardBackground: isDarkMode ? '#2d2d2d' : '#efefef', // Fondo de tarjetas oscuro o claro
       border: isDarkMode ? '#444' : '#ddd', // Bordes más sutiles
-      button: isDarkMode ? '#bb86fc' : '#e67e22', // Color del botón
-      buttonHover: isDarkMode ? '#9a67ea' : '#d35400', // Color del botón al hacer hover
+      button: isDarkMode ? '#da7319' : '#e67e22', // Botón naranja oscuro o claro
+      buttonHover: isDarkMode ? '#d05c0f' : '#d35400', // Botón naranja más oscuro al hacer hover
     },
   };
 

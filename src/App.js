@@ -9,6 +9,7 @@ import PredictionBasic from './pages/PredictionBasic';
 import PredictionPro from './pages/PredictionPro';
 import PredictionPremium from './pages/PredictionPremium';
 import Contacto from './pages/Contacto'; // Importa la página de contacto
+import About from './pages/About'; // Importa el componente About
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/prediction-pro" element={<PredictionPro />} />
           <Route path="/prediction-premium" element={<PredictionPremium />} />
           <Route path="/contacto" element={<Contacto />} /> {/* Ruta para contacto */}
+          <Route path="/about" element={<About />} /> {/* Ruta para About */}
         </Routes>
       </ThemeProvider>
     </Router>
