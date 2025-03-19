@@ -29,7 +29,26 @@ const Home = () => {
   const [cryptos, setCryptos] = useState([]);
   const [selectedCrypto, setSelectedCrypto] = useState('Bitcoin');
   const [timeRange, setTimeRange] = useState('1D');
+  const [predictions, setPredictions] = useState({});
   const theme = useContext(ThemeContext);
+
+  // Cargar datos de predicciones desde el archivo JSON
+  useEffect(() => {
+    fetch('/predictions.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al cargar el archivo JSON');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Datos cargados:', data); // Verifica los datos cargados
+        setPredictions(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, []);
 
   // Simulación de la obtención del plan del usuario
   useEffect(() => {
@@ -70,28 +89,19 @@ const Home = () => {
     setTimeRange(range);
   };
 
-  // Datos simulados para el gráfico según el rango de tiempo
+  // Datos para el gráfico
   const getChartData = () => {
-    let labels = [];
-    let data = [];
+    const selectedData = predictions[timeRange] || [];
+    const labels = selectedData.map((entry) => {
+      const date = new Date(entry.date);
+      return timeRange === '1D'
+        ? date.toLocaleTimeString() // Formatea la hora para "1D"
+        : date.toLocaleDateString(); // Formatea la fecha para "1W" y "1M"
+    });
+    const data = selectedData.map((entry) => entry.price);
 
-    switch (timeRange) {
-      case '1D': // Predicciones para 1 día
-        labels = ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7'];
-        data = [41000, 41500, 42000, 41800, 42200, 42500, 43000];
-        break;
-      case '1W': // Predicciones para 1 semana
-        labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7'];
-        data = [40000, 40500, 41000, 41500, 42000, 42500, 43000];
-        break;
-      case '1M': // Predicciones para 1 mes
-        labels = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4'];
-        data = [38000, 39000, 40000, 42000];
-        break;
-      default:
-        labels = [];
-        data = [];
-    }
+    console.log('Labels:', labels); // Verifica las etiquetas formateadas
+    console.log('Data:', data); // Verifica los datos
 
     return {
       labels,
