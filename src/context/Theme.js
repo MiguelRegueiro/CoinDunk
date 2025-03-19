@@ -29,9 +29,9 @@ export const ThemeProvider = ({ children }) => {
     colors: {
       background: isDarkMode ? '#1e1e1e' : '#ffffff', // Fondo oscuro o claro
       text: isDarkMode ? '#e0e0e0' : '#000000', // Texto claro u oscuro
-      primary: isDarkMode ? '#da7319' : '#e67e22', // Color naranja oscuro o claro
+      primary: isDarkMode ? '#e49a05' : '#e67e22', // Color naranja oscuro o claro
       secondary: isDarkMode ? '#03dac6' : '#03dac6', // Color secundario (se mantiene igual)
-      cardBackground: isDarkMode ? '#2d2d2d' : '#efefef', // Fondo de tarjetas oscuro o claro
+      cardBackground: isDarkMode ? '#2d2d2d' : '#f9f9f9', // Fondo de tarjetas oscuro o claro
       border: isDarkMode ? '#444' : '#ddd', // Bordes más sutiles
       button: isDarkMode ? '#da7319' : '#e67e22', // Botón naranja oscuro o claro
       buttonHover: isDarkMode ? '#d05c0f' : '#d35400', // Botón naranja más oscuro al hacer hover
