@@ -1,18 +1,17 @@
-/* Estilos generales */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
-
-.home-container {
+/* src/pages/Planes.css */
+.planes-container {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif; /* Fuente anterior */
 }
 
-.home-container h1 {
+.logo {
+  margin-bottom: 20px;
+}
+
+h1 {
   font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 20px;
@@ -24,12 +23,12 @@ body {
   margin-bottom: 40px;
 }
 
-/* Estilos para los planes */
-.plans-container {
+.plans-grid {
   display: flex;
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  padding: 20px;
 }
 
 .plan-card {
@@ -38,7 +37,10 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 300px;
+  text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .plan-card:hover {
@@ -52,49 +54,10 @@ body {
   margin-bottom: 15px;
 }
 
-.plan-card p {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.plan-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 20px;
-}
-
-.plan-card ul li {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.plan-button {
-  display: inline-block;
-  background-color: #faa226;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.plan-button:hover {
-  background-color: #C8821E;
-}
-
-/* Estilos para el logo */
-.home-container img {
-  margin-bottom: 20px;
-}
-
-/* Estilos para el precio */
 .price {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #2c3e50;
+  color: #e67e22; /* Color naranja */
   margin-bottom: 10px;
 }
 
@@ -104,22 +67,20 @@ body {
   color: #666;
 }
 
-/* Estilos para la descripción del plan */
-.plan-card .description {
+.plan-description {
   font-size: 1rem;
   color: #666;
+  text-align: justify;
   margin-bottom: 15px;
 }
 
-/* Estilos para el texto de prueba gratuita */
 .trial {
   font-size: 0.9rem;
-  color: #3498db;
+  color: #e67e22; /* Color naranja */
   font-weight: bold;
   margin-bottom: 15px;
 }
 
-/* Estilos para la lista de características */
 .plan-card ul {
   list-style-type: none;
   padding: 0;
@@ -130,4 +91,28 @@ body {
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 10px;
+}
+
+.button-container {
+  margin-top: auto; /* Empuja el botón hacia abajo */
+  display: flex;
+  justify-content: center; /* Centra el botón horizontalmente */
+}
+
+.plan-button {
+  display: inline-block;
+  background-color: #e67e22; /* Color naranja */
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 200px; /* Ancho máximo para los botones */
+  text-align: center;
+}
+
+.plan-button:hover {
+  background-color: #d35400; /* Naranja más oscuro al hacer hover */
 }
