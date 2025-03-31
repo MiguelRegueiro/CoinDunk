@@ -12,6 +12,8 @@ import {
   Legend,
 } from 'chart.js';
 import './Home.css';
+import CryptoButton from '../components/CryptoButton';
+import { generatePredictions } from '../components/predictions';
 
 // Registra los componentes de Chart.js
 ChartJS.register(
@@ -30,46 +32,30 @@ const Home = () => {
   const [selectedCrypto, setSelectedCrypto] = useState('Bitcoin');
   const [timeRange, setTimeRange] = useState('1D');
   const [predictions, setPredictions] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(null);
   const theme = useContext(ThemeContext);
 
-  // Cargar datos de predicciones desde el archivo JSON
-  useEffect(() => {
-    fetch('/predictions.json')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al cargar el archivo JSON');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Datos cargados:', data); // Verifica los datos cargados
-        setPredictions(data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }, []);
+  // Datos iniciales de criptomonedas
+  const cryptoData = [
+    { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
+    { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
+    { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
+    { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
+    { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
+  ];
 
   // Simulación de la obtención del plan del usuario
   useEffect(() => {
     const fetchUserPlan = async () => {
-      const plan = 'basic'; // Cambia a 'pro' o 'premium' para probar otros planes
+      const plan = 'basic';
       setUserPlan(plan);
     };
-
     fetchUserPlan();
   }, []);
 
   // Filtra las criptomonedas según el plan del usuario
   useEffect(() => {
-    const cryptoData = [
-      { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
-      { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
-      { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
-      { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
-      { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
-    ];
-
     if (userPlan === 'basic') {
       setCryptos(cryptoData.slice(0, 3));
     } else if (userPlan === 'pro') {
@@ -80,9 +66,55 @@ const Home = () => {
   }, [userPlan]);
 
   // Función para manejar la selección de una criptomoneda
-  const handleCryptoSelect = (cryptoName) => {
+  const handleCryptoSelect = async (cryptoName) => {
+    setIsLoading(true);
     setSelectedCrypto(cryptoName);
+    localStorage.setItem('selectedCrypto', cryptoName);
+  
+    try {
+      // Generamos predicciones con el precio actual
+      const predictionData = await generatePredictions(cryptoName);
+      console.log("Datos de predicción:", predictionData);
+      
+      // Actualizamos el estado con las nuevas predicciones
+      setPredictions(predictionData.predictions);
+      setCurrentPrice(predictionData.currentPrice);
+      
+      // Guardamos los datos en localStorage
+      localStorage.setItem('lastPredictions', JSON.stringify(predictionData));
+      
+    } catch (error) {
+      console.error("Error generando predicciones:", error);
+      // Datos de ejemplo en caso de error
+      setPredictions({
+        "1D": [{date: new Date().toISOString(), price: 42000}],
+        "1W": [{date: new Date().toISOString(), price: 42000}],
+        "1M": [{date: new Date().toISOString(), price: 42000}]
+      });
+      setCurrentPrice(42000);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // Cargar criptomoneda seleccionada desde localStorage al inicio
+  useEffect(() => {
+    const savedCrypto = localStorage.getItem('selectedCrypto');
+    const savedPredictions = localStorage.getItem('lastPredictions');
+    
+    if (savedCrypto && cryptos.some(c => c.name === savedCrypto)) {
+      setSelectedCrypto(savedCrypto);
+      if (savedPredictions) {
+        const parsed = JSON.parse(savedPredictions);
+        setPredictions(parsed.predictions);
+        setCurrentPrice(parsed.currentPrice);
+      } else {
+        handleCryptoSelect(savedCrypto);
+      }
+    } else {
+      handleCryptoSelect('Bitcoin');
+    }
+  }, []);
 
   // Función para manejar el cambio de rango de tiempo
   const handleTimeRangeChange = (range) => {
@@ -95,13 +127,11 @@ const Home = () => {
     const labels = selectedData.map((entry) => {
       const date = new Date(entry.date);
       return timeRange === '1D'
-        ? date.toLocaleTimeString() // Formatea la hora para "1D"
-        : date.toLocaleDateString(); // Formatea la fecha para "1W" y "1M"
+        ? `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}h`
+        : date.toLocaleDateString();
     });
+    
     const data = selectedData.map((entry) => entry.price);
-
-    console.log('Labels:', labels); // Verifica las etiquetas formateadas
-    console.log('Data:', data); // Verifica los datos
 
     return {
       labels,
@@ -110,9 +140,14 @@ const Home = () => {
           label: `Predicción de precio para ${selectedCrypto}`,
           data,
           borderColor: theme.colors.primary,
-          backgroundColor: theme.isDarkMode ? 'rgba(255, 165, 0, 0.1)' : 'rgba(230, 126, 34, 0.1)',
+          backgroundColor: theme.isDarkMode 
+            ? 'rgba(255, 165, 0, 0.1)' 
+            : 'rgba(230, 126, 34, 0.1)',
           fill: true,
           tension: 0.4,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+          borderWidth: 2
         },
       ],
     };
@@ -127,34 +162,53 @@ const Home = () => {
         position: 'top',
         labels: {
           color: theme.colors.text,
+          font: {
+            size: 14
+          }
         },
       },
       title: {
         display: true,
         text: `Predicción de precios para ${selectedCrypto} (${timeRange})`,
         color: theme.colors.text,
+        font: {
+          size: 16
+        }
       },
       tooltip: {
         backgroundColor: theme.colors.cardBackground,
         titleColor: theme.colors.text,
         bodyColor: theme.colors.text,
+        borderColor: theme.colors.primary,
+        borderWidth: 1,
+        padding: 10,
+        callbacks: {
+          label: (context) => {
+            return `$${context.parsed.y.toFixed(2)}`;
+          }
+        }
       },
     },
     scales: {
       x: {
         grid: {
           color: theme.colors.border,
+          drawBorder: false
         },
         ticks: {
           color: theme.colors.text,
+          maxRotation: 45,
+          minRotation: 45
         },
       },
       y: {
         grid: {
           color: theme.colors.border,
+          drawBorder: false
         },
         ticks: {
           color: theme.colors.text,
+          callback: (value) => `$${value}`
         },
       },
     },
@@ -184,30 +238,51 @@ const Home = () => {
       <div className="chart-container">
         <h2 style={{ color: theme.colors.primary }}>
           Predicciones de precios para {selectedCrypto}
+          {currentPrice && (
+            <span style={{ 
+              fontSize: '1rem', 
+              marginLeft: '10px',
+              color: theme.colors.secondaryText
+            }}>
+              (Actual: ${currentPrice.toFixed(2)})
+            </span>
+          )}
         </h2>
         <div className="chart-wrapper">
-          <Line data={getChartData()} options={chartOptions} height={300} />
+          {isLoading ? (
+            <div className="loading-indicator">
+              <div className="spinner"></div>
+              <p>Generando predicciones...</p>
+            </div>
+          ) : (
+            <Line data={getChartData()} options={chartOptions} height={300} />
+          )}
         </div>
+        
         {/* Selector de rango de tiempo */}
         <div className="time-range-selector">
           {['1D', '1W', '1M'].map((range) => (
             <button
               key={range}
-              className={`time-range-button ${
-                timeRange === range ? 'active' : ''
-              }`}
+              className={`time-range-button ${timeRange === range ? 'active' : ''}`}
               style={{
-                backgroundColor: timeRange === range ? theme.colors.primary : theme.colors.cardBackground,
+                backgroundColor: timeRange === range 
+                  ? theme.colors.primary 
+                  : theme.colors.cardBackground,
                 color: timeRange === range ? '#fff' : theme.colors.text,
+                border: `1px solid ${theme.colors.border}`
               }}
               onClick={() => handleTimeRangeChange(range)}
+              disabled={isLoading}
             >
               {range === '1D' ? '1 Día' : range === '1W' ? '1 Semana' : '1 Mes'}
             </button>
           ))}
         </div>
+        
         <p style={{ color: theme.colors.secondaryText, marginTop: '10px' }}>
-          Los datos mostrados son predicciones simuladas basadas en modelos avanzados.
+          Predicciones basadas en el precio actual y volatilidad histórica.
+          {isLoading && ' Actualizando...'}
         </p>
       </div>
 
@@ -216,19 +291,14 @@ const Home = () => {
         <h3 style={{ color: theme.colors.primary }}>Selecciona una criptomoneda:</h3>
         <div className="crypto-buttons">
           {cryptos.map((crypto) => (
-            <button
+            <CryptoButton
               key={crypto.id}
-              className={`crypto-button ${
-                selectedCrypto === crypto.name ? 'active' : ''
-              }`}
-              style={{
-                backgroundColor: selectedCrypto === crypto.name ? theme.colors.primary : theme.colors.cardBackground,
-                color: selectedCrypto === crypto.name ? '#fff' : theme.colors.text,
-              }}
-              onClick={() => handleCryptoSelect(crypto.name)}
-            >
-              {crypto.name} ({crypto.symbol})
-            </button>
+              crypto={crypto}
+              selectedCrypto={selectedCrypto}
+              theme={theme}
+              handleCryptoSelect={handleCryptoSelect}
+              disabled={isLoading}
+            />
           ))}
         </div>
       </div>
