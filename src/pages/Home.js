@@ -31,19 +31,7 @@ const Home = () => {
   const [cryptos, setCryptos] = useState([]);
   const [selectedCrypto, setSelectedCrypto] = useState('Bitcoin');
   const [timeRange, setTimeRange] = useState('1D');
-  const [predictions, setPredictions] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState(null);
   const theme = useContext(ThemeContext);
-
-  // Datos iniciales de criptomonedas
-  const cryptoData = [
-    { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
-    { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
-    { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
-    { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
-    { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
-  ];
 
   // Simulación de la obtención del plan del usuario
   useEffect(() => {
@@ -123,15 +111,26 @@ const Home = () => {
 
   // Datos para el gráfico
   const getChartData = () => {
-    const selectedData = predictions[timeRange] || [];
-    const labels = selectedData.map((entry) => {
-      const date = new Date(entry.date);
-      return timeRange === '1D'
-        ? `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}h`
-        : date.toLocaleDateString();
-    });
-    
-    const data = selectedData.map((entry) => entry.price);
+    let labels = [];
+    let data = [];
+
+    switch (timeRange) {
+      case '1D': // Predicciones para 1 día
+        labels = ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7'];
+        data = [41000, 41500, 42000, 41800, 42200, 42500, 43000];
+        break;
+      case '1W': // Predicciones para 1 semana
+        labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7'];
+        data = [40000, 40500, 41000, 41500, 42000, 42500, 43000];
+        break;
+      case '1M': // Predicciones para 1 mes
+        labels = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4'];
+        data = [38000, 39000, 40000, 42000];
+        break;
+      default:
+        labels = [];
+        data = [];
+    }
 
     return {
       labels,
