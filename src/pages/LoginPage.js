@@ -69,7 +69,7 @@ function LoginPage() {
                 localStorage.setItem('coindunk_user', JSON.stringify(response.data.user));
                 
                 // Redirigir al dashboard
-                navigate('/dashboard');
+                navigate('/predicciones');
             } else {
                 throw new Error(response.data.message || 'Credenciales incorrectas');
             }

@@ -1,30 +1,39 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AppBar, Toolbar, Button, Typography, Box, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LoginIcon from '@mui/icons-material/Login';
 import { ThemeContext } from '../context/Theme';
-import { generateSecureRandom } from '../components/security';
 
 const Navbar = () => {
   const theme = useContext(ThemeContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
-  const [predictionPath, setPredictionPath] = useState('');
 
-  useEffect(() => {
-    // Verificar autenticación al cargar
+  // Función para actualizar el estado del usuario
+  const updateUserState = () => {
     const userData = localStorage.getItem('coindunk_user');
-    if (userData) {
-      const parsedUser = JSON.parse(userData);
-      setUser(parsedUser);
-      
-      // Generar ruta segura para predicciones
-      const randomString = generateSecureRandom(8);
-      setPredictionPath(`/predicciones-${parsedUser.username}-${randomString}`);
-    }
+    setUser(userData ? JSON.parse(userData) : null);
+  };
+
+  // Efecto que se ejecuta al cambiar la ruta
+  useEffect(() => {
+    updateUserState();
+    
+    const handleStorageChange = () => {
+      updateUserState();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [location.pathname]);
+
+  // Efecto inicial para cargar el usuario
+  useEffect(() => {
+    updateUserState();
   }, []);
 
   const handleMenuOpen = (event) => {
@@ -43,9 +52,9 @@ const Navbar = () => {
     localStorage.removeItem('coindunk_token');
     localStorage.removeItem('coindunk_user');
     setUser(null);
-    setPredictionPath('');
     handleMenuClose();
     navigate('/');
+    window.dispatchEvent(new Event('storage'));
   };
 
   if (!theme) {
@@ -94,7 +103,7 @@ const Navbar = () => {
             <>
               <Button
                 component={Link}
-                to={predictionPath}
+                to="/predicciones"
                 sx={{
                   color: '#fff',
                   textTransform: 'none',
@@ -217,16 +226,25 @@ const Navbar = () => {
             </>
           ) : (
             <Button
+              variant="contained"
               startIcon={<LoginIcon />}
               onClick={handleLogin}
               sx={{
+                backgroundColor: theme.colors.primary,
                 color: '#fff',
                 textTransform: 'none',
                 fontSize: '0.875rem',
                 marginLeft: 2,
+                padding: '8px 16px',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 '&:hover': {
-                  backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                  backgroundColor: theme.colors.primaryDark,
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  transform: 'translateY(-1px)',
                 },
+                transition: 'all 0.3s ease',
               }}
             >
               Iniciar Sesión
