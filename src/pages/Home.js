@@ -15,7 +15,6 @@ import './Home.css';
 import CryptoButton from '../components/CryptoButton';
 import { generatePredictions } from '../components/predictions';
 
-// Registra los componentes de Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,10 +32,9 @@ const Home = () => {
   const [timeRange, setTimeRange] = useState('1D');
   const [predictions, setPredictions] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState(0); // Inicializar con 0 en lugar de nul
+  const [currentPrice, setCurrentPrice] = useState(0);
   const theme = useContext(ThemeContext);
 
-  // Datos iniciales de criptomonedas
   const cryptoData = [
     { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
     { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
@@ -45,16 +43,14 @@ const Home = () => {
     { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
   ];
 
-  // Simulación de la obtención del plan del usuario
   useEffect(() => {
-    const fetchUserPlan = async () => {
+    const fetchUserPlan = () => {
       const plan = 'basic';
       setUserPlan(plan);
     };
     fetchUserPlan();
   }, []);
 
-  // Filtra las criptomonedas según el plan del usuario
   useEffect(() => {
     if (userPlan === 'basic') {
       setCryptos(cryptoData.slice(0, 3));
@@ -65,27 +61,18 @@ const Home = () => {
     }
   }, [userPlan]);
 
-  // Función para manejar la selección de una criptomoneda
   const handleCryptoSelect = async (cryptoName) => {
     setIsLoading(true);
     setSelectedCrypto(cryptoName);
     localStorage.setItem('selectedCrypto', cryptoName);
   
     try {
-      // Generamos predicciones con el precio actual
       const predictionData = await generatePredictions(cryptoName);
-      console.log("Datos de predicción:", predictionData);
-      
-      // Actualizamos el estado con las nuevas predicciones
       setPredictions(predictionData.predictions);
       setCurrentPrice(predictionData.currentPrice);
-      
-      // Guardamos los datos en localStorage
       localStorage.setItem('lastPredictions', JSON.stringify(predictionData));
-      
     } catch (error) {
       console.error("Error generando predicciones:", error);
-      // Datos de ejemplo en caso de error
       setPredictions({
         "1D": [{date: new Date().toISOString(), price: 42000}],
         "1W": [{date: new Date().toISOString(), price: 42000}],
@@ -97,7 +84,6 @@ const Home = () => {
     }
   };
 
-  // Cargar criptomoneda seleccionada desde localStorage al inicio
   useEffect(() => {
     const savedCrypto = localStorage.getItem('selectedCrypto');
     const savedPredictions = localStorage.getItem('lastPredictions');
@@ -116,12 +102,10 @@ const Home = () => {
     }
   }, []);
 
-  // Función para manejar el cambio de rango de tiempo
   const handleTimeRangeChange = (range) => {
     setTimeRange(range);
   };
 
-  // Datos para el gráfico
   const getChartData = () => {
     const selectedData = predictions[timeRange] || [];
     const labels = selectedData.map((entry) => {
@@ -141,19 +125,20 @@ const Home = () => {
           data,
           borderColor: theme.colors.primary,
           backgroundColor: theme.isDarkMode 
-            ? 'rgba(255, 165, 0, 0.1)' 
-            : 'rgba(230, 126, 34, 0.1)',
+            ? 'rgba(255, 167, 38, 0.2)' 
+            : 'rgba(230, 126, 34, 0.2)',
           fill: true,
           tension: 0.4,
-          pointRadius: 2,
-          pointHoverRadius: 5,
-          borderWidth: 2
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          borderWidth: 2,
+          pointBackgroundColor: theme.colors.primary,
+          pointBorderColor: '#fff'
         },
       ],
     };
   };
 
-  // Opciones del gráfico
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -161,7 +146,7 @@ const Home = () => {
       legend: {
         position: 'top',
         labels: {
-          color: theme.colors.text,
+          color: theme.colors.textPrimary,
           font: {
             size: 14
           }
@@ -170,18 +155,19 @@ const Home = () => {
       title: {
         display: true,
         text: `Predicción de precios para ${selectedCrypto} (${timeRange})`,
-        color: theme.colors.text,
+        color: theme.colors.textPrimary,
         font: {
-          size: 16
+          size: 16,
+          weight: 'bold'
         }
       },
       tooltip: {
-        backgroundColor: theme.colors.cardBackground,
-        titleColor: theme.colors.text,
-        bodyColor: theme.colors.text,
+        backgroundColor: theme.colors.surface,
+        titleColor: theme.colors.textPrimary,
+        bodyColor: theme.colors.textPrimary,
         borderColor: theme.colors.primary,
         borderWidth: 1,
-        padding: 10,
+        padding: 12,
         callbacks: {
           label: (context) => {
             return `$${context.parsed.y.toFixed(2)}`;
@@ -192,22 +178,22 @@ const Home = () => {
     scales: {
       x: {
         grid: {
-          color: theme.colors.border,
+          color: theme.colors.divider,
           drawBorder: false
         },
         ticks: {
-          color: theme.colors.text,
+          color: theme.colors.textSecondary,
           maxRotation: 45,
           minRotation: 45
         },
       },
       y: {
         grid: {
-          color: theme.colors.border,
+          color: theme.colors.divider,
           drawBorder: false
         },
         ticks: {
-          color: theme.colors.text,
+          color: theme.colors.textSecondary,
           callback: (value) => `$${value}`
         },
       },
@@ -223,43 +209,63 @@ const Home = () => {
       className="home-container"
       style={{
         backgroundColor: theme.colors.background,
-        color: theme.colors.text,
+        color: theme.colors.textPrimary,
       }}
     >
-      {/* Encabezado con logo y nombre */}
       <div className="header">
         <div className="header-content">
-          <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
-          <h1 className="app-name">Predicciones de Criptomonedas</h1>
+          <img 
+            src="CoinDunkNB.png" 
+            alt="Logo de CoinDunk" 
+            className="logohome" 
+            style={{ filter: theme.isDarkMode ? 'brightness(0.8)' : 'brightness(1)' }}
+          />
+          <h1 className="app-name" style={{ color: theme.colors.textPrimary }}>
+            Predicciones de Criptomonedas
+          </h1>
         </div>
       </div>
 
-      {/* Gráfico de la criptomoneda seleccionada */}
-      <div className="chart-container">
+      <div 
+        className="chart-container"
+        style={{
+          backgroundColor: theme.colors.surface,
+          boxShadow: theme.colors.shadow,
+          border: `1px solid ${theme.colors.border}`
+        }}
+      >
         <h2 style={{ color: theme.colors.primary }}>
           Predicciones de precios para {selectedCrypto}
           {currentPrice && (
             <span style={{ 
               fontSize: '1rem', 
               marginLeft: '10px',
-              color: theme.colors.secondaryText
+              color: theme.colors.textSecondary
             }}>
               (Actual: ${currentPrice.toFixed(2)})
             </span>
           )}
         </h2>
+        
         <div className="chart-wrapper">
           {isLoading ? (
             <div className="loading-indicator">
-              <div className="spinner"></div>
-              <p>Generando predicciones...</p>
+              <div 
+                className="spinner" 
+                style={{ 
+                  borderTopColor: theme.colors.primary,
+                  borderColor: theme.colors.divider
+                }}
+              />
+              <p style={{ color: theme.colors.textSecondary }}>
+                Generando predicciones...
+              </p>
             </div>
           ) : (
             <Line data={getChartData()} options={chartOptions} height={300} />
           )}
         </div>
         
-        {/* Selector de rango de tiempo */}
         <div className="time-range-selector">
           {['1D', '1W', '1M'].map((range) => (
             <button
@@ -268,9 +274,10 @@ const Home = () => {
               style={{
                 backgroundColor: timeRange === range 
                   ? theme.colors.primary 
-                  : theme.colors.cardBackground,
-                color: timeRange === range ? '#fff' : theme.colors.text,
-                border: `1px solid ${theme.colors.border}`
+                  : theme.colors.paper,
+                color: timeRange === range ? '#fff' : theme.colors.textPrimary,
+                border: `1px solid ${theme.colors.border}`,
+                transition: 'all 0.3s ease'
               }}
               onClick={() => handleTimeRangeChange(range)}
               disabled={isLoading}
@@ -280,13 +287,16 @@ const Home = () => {
           ))}
         </div>
         
-        <p style={{ color: theme.colors.secondaryText, marginTop: '10px' }}>
+        <p style={{ 
+          color: theme.colors.textSecondary, 
+          marginTop: '10px',
+          opacity: 0.8
+        }}>
           Predicciones basadas en el precio actual y volatilidad histórica.
           {isLoading && ' Actualizando...'}
         </p>
       </div>
 
-      {/* Selector de criptomonedas */}
       <div className="crypto-selector">
         <h3 style={{ color: theme.colors.primary }}>Selecciona una criptomoneda:</h3>
         <div className="crypto-buttons">
@@ -303,15 +313,26 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Información adicional */}
-      <div className="info-container">
-        <p style={{ color: theme.colors.secondaryText }}>
-          Usando el plan: <strong>{userPlan}</strong>.
+      <div 
+        className="info-container"
+        style={{
+          backgroundColor: theme.colors.paper,
+          border: `1px solid ${theme.colors.border}`
+        }}
+      >
+        <p style={{ color: theme.colors.textSecondary }}>
+          Usando el plan: <strong style={{ color: theme.colors.textPrimary }}>{userPlan}</strong>.
         </p>
         {userPlan === 'basic' && (
-          <p style={{ color: theme.colors.secondaryText }}>
+          <p style={{ color: theme.colors.textSecondary }}>
             ¿Quieres ver más criptomonedas?{' '}
-            <a href="/planes" style={{ color: theme.colors.primary }}>
+            <a 
+              href="/planes" 
+              style={{ 
+                color: theme.colors.primary,
+                fontWeight: 500
+              }}
+            >
               Actualiza tu plan
             </a>
           </p>

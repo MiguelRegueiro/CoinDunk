@@ -3,6 +3,7 @@
   text-align: center;
   min-height: 100vh;
   font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header {
@@ -22,12 +23,14 @@
 .logohome {
   width: 60px;
   height: 60px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .app-name {
   font-size: 32px;
   font-weight: 700;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .chart-container {
@@ -36,12 +39,15 @@
   padding: 20px;
   border-radius: 15px;
   background-color: var(--card-background);
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-elevation);
+  border: 1px solid var(--border-color);
 }
 
 .chart-wrapper {
   height: 300px;
   position: relative;
+  margin: 20px 0;
 }
 
 .time-range-selector {
@@ -56,47 +62,50 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.time-range-button:hover {
+  transform: translateY(-2px);
+}
+
+.time-range-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .crypto-selector {
-  margin: 40px 0;
+  margin: 40px auto;
+  max-width: 1000px;
 }
 
 .crypto-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
   flex-wrap: wrap;
-}
-
-.crypto-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 20px;
 }
 
 .info-container {
-  margin-top: 40px;
+  margin: 40px auto 0;
+  max-width: 1000px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--paper-color);
+  border: 1px solid var(--border-color);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .chart-container {
-    padding: 10px;
-  }
-
-  .time-range-selector {
-    flex-direction: column;
-  }
-
-  .crypto-buttons {
-    flex-direction: column;
-  }
+.info-container a {
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
+.info-container a:hover {
+  text-decoration: underline;
+}
 
 .loading-indicator {
   display: flex;
@@ -104,12 +113,13 @@
   align-items: center;
   justify-content: center;
   height: 300px;
+  color: var(--text-color);
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  border-top: 4px solid #3498db;
+  border-top: 4px solid var(--primary-color);
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
@@ -119,4 +129,58 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Variables CSS para temas */
+:root {
+  --shadow-elevation: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  --card-background: #ffffff;
+  --border-color: #e0e0e0;
+  --paper-color: #fafafa;
+}
+
+[data-theme="dark"] {
+  --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --card-background: #1e1e1e;
+  --border-color: #424242;
+  --paper-color: #2d2d2d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .app-name {
+    font-size: 24px;
+  }
+  
+  .chart-container {
+    padding: 15px;
+  }
+
+  .time-range-selector {
+    flex-wrap: wrap;
+  }
+
+  .time-range-button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+  
+  .crypto-buttons {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 20px 10px;
+  }
+  
+  .chart-container {
+    padding: 10px;
+  }
 }

@@ -11,6 +11,7 @@ import PredictionPremium from './pages/PredictionPremium';
 import Contacto from './pages/Contacto'; // Importa la página de contacto
 import About from './pages/About'; // Importa el componente About
 import LoginPage from './pages/LoginPage'; 
+import Perfil from './pages/Perfil';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/contacto" element={<Contacto />} /> {/* Ruta para contacto */}
           <Route path="/about" element={<About />} /> {/* Ruta para About */}
           <Route path="/login" element={<LoginPage />} /> {/* Ruta para About */}
+          <Route path="/perfil" element={<Perfil />} /> {/* Ruta para el perfil */}
         </Routes>
       </ThemeProvider>
     </Router>
