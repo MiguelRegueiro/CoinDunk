@@ -1,189 +1,254 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../context/Theme';
-import { Box, Typography, Avatar, Button, Divider, Paper, Switch } from '@mui/material';
-import { Email, Person, Security, DarkMode, LightMode } from '@mui/icons-material';
+import { 
+  Box, 
+  Typography, 
+  Avatar, 
+  Button, 
+  Divider, 
+  Paper, 
+  Switch, 
+  Chip,
+  Container,
+  Stack,
+  IconButton
+} from '@mui/material';
+import { 
+  Email, 
+  Person, 
+  Security, 
+  DarkMode, 
+  LightMode,
+  ArrowBack,
+  Logout
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const Perfil = () => {
-  const theme = useContext(ThemeContext) || {
-    isDarkMode: false,
-    colors: {
-      background: '#f5f5f5',
-      surface: '#FFFFFF',
-      cardBackground: '#FFFFFF',
-      paper: '#FAFAFA',
-      text: '#212121',
-      textPrimary: '#333333',
-      textSecondary: '#666666',
-      primary: '#E67E22',
-      primaryHover: '#D35400',
-      border: '#E0E0E0',
-      divider: '#EEEEEE'
-    }
+  const theme = useContext(ThemeContext);
+  const navigate = useNavigate();
+  
+  // Obtener datos del usuario
+  const userData = JSON.parse(localStorage.getItem('coindunk_user')) || {};
+  
+  // Detalles de planes
+  const planDetails = {
+    basic: { 
+      name: 'Básico', 
+      color: 'default', 
+      description: '3 criptomonedas',
+      icon: '⭐'
+    },
+    pro: { 
+      name: 'Profesional', 
+      color: 'primary', 
+      description: '10 criptomonedas',
+      icon: '🚀'
+    },
+    premium: { 
+      name: 'Premium', 
+      color: 'secondary', 
+      description: 'Ilimitado',
+      icon: '👑'
+    },
   };
 
-  const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem('coindunk_user')) || {};
   const user = {
-    username: userData.username || 'Usuario',
-    email: userData.email || 'email@ejemplo.com',
+    username: userData.username || 'Invitado',
+    email: userData.email || 'No especificado',
     plan: userData.plan || 'basic'
   };
 
-  // Estilos actualizados con mejor contraste
-  const styles = {
-    pageContainer: {
+  return (
+    <Box sx={{
       minHeight: '100vh',
       backgroundColor: theme.colors.background,
-      color: theme.colors.textPrimary,
-      padding: '2rem'
-    },
-    profileCard: {
-      padding: '2rem',
-      borderRadius: '16px',
-      boxShadow: theme.colors.shadow,
-      backgroundColor: theme.colors.surface,
-      maxWidth: '600px',
-      margin: '2rem auto'
-    },
-    profileItem: {
-      display: 'flex',
-      alignItems: 'center',
-      margin: '1.5rem 0',
-      padding: '1rem',
-      borderRadius: '8px',
-      backgroundColor: theme.colors.paper,
-      color: theme.colors.textPrimary // Aseguramos color legible
-    },
-    avatar: {
-      width: 120, 
-      height: 120, 
-      fontSize: '3rem', 
-      bgcolor: theme.colors.primary,
-      mb: 2,
-      color: '#fff' // Texto blanco en el avatar
-    },
-    button: {
-      bgcolor: theme.colors.primary, 
-      color: '#fff', // Texto blanco en botones primarios
-      '&:hover': { 
-        bgcolor: theme.colors.primaryHover 
-      }
-    },
-    outlinedButton: {
-      color: theme.colors.primary, 
-      borderColor: theme.colors.primary,
-      '&:hover': {
-        borderColor: theme.colors.primaryDark
-      }
-    },
-    strongText: {
-      color: theme.colors.textPrimary, // Texto principal para elementos importantes
-      fontWeight: 'bold'
-    },
-    labelText: {
-      color: theme.colors.textSecondary // Texto secundario para etiquetas
-    }
-  };
+      pt: 10, // Espacio para el navbar
+      pb: 4
+    }}>
+      <Container maxWidth="sm">
+        {/* Tarjeta de perfil */}
+        <Paper elevation={3} sx={{
+          borderRadius: 3,
+          overflow: 'hidden',
+          backgroundColor: theme.colors.surface,
+          boxShadow: theme.colors.shadow,
+          mb: 30
+        }}>
+          {/* Header con gradiente */}
+          <Box sx={{
+            p: 3,
+            background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.primaryDark} 100%)`,
+            color: '#fff',
+            position: 'relative',
+            textAlign: 'center'
+          }}>
+            <IconButton
+              onClick={() => navigate('/')}
+              sx={{
+                position: 'absolute',
+                left: 16,
+                top: 16,
+                color: '#fff',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)'
+                },
+                width: 40,
+                height: 40
+              }}
+              aria-label="Volver"
+            >
+              <ArrowBack />
+            </IconButton>
+            
+            <Typography variant="h5" sx={{
+              fontWeight: 'bold',
+              mt: 1
+            }}>
+              Mi Perfil
+            </Typography>
+          </Box>
 
-  return (
-    <Box sx={styles.pageContainer}>
-      <Paper sx={styles.profileCard}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.colors.primary }}>
-            Mi Perfil
-          </Typography>
-          <Button 
-            variant="contained" 
-            onClick={() => navigate('/')}
-            sx={styles.button}
-          >
-            Volver al Inicio
-          </Button>
-        </Box>
+          {/* Contenido principal */}
+          <Box sx={{ p: 3 }}>
+            <Stack direction="column" alignItems="center" spacing={2} sx={{ mb: 4 }}>
+              <Avatar sx={{ 
+                width: 96, 
+                height: 96, 
+                fontSize: '2.5rem',
+                bgcolor: theme.colors.primary,
+                mb: 1
+              }}>
+                {user.username.charAt(0).toUpperCase()}
+              </Avatar>
+              
+              <Typography variant="h6" sx={{ 
+                fontWeight: 'bold',
+                color: theme.colors.textPrimary
+              }}>
+                {user.username}
+              </Typography>
+              
+              <Chip 
+                label={`${planDetails[user.plan]?.icon} ${planDetails[user.plan]?.name}`}
+                color={planDetails[user.plan]?.color}
+                size="small"
+                sx={{
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase'
+                }}
+              />
+              <Typography variant="caption" sx={{ 
+                color: theme.colors.textSecondary
+              }}>
+                {planDetails[user.plan]?.description}
+              </Typography>
+            </Stack>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 4 }}>
-          <Avatar sx={styles.avatar}>
-            {user.username.charAt(0).toUpperCase()}
-          </Avatar>
-          <Typography variant="h5" sx={styles.strongText}>
-            {user.username}
-          </Typography>
-          <Typography sx={styles.labelText}>
-            Plan: {user.plan.toUpperCase()}
-          </Typography>
-        </Box>
+            <Divider sx={{ my: 3, borderColor: theme.colors.divider }} />
 
-        <Divider sx={{ my: 3, borderColor: theme.colors.divider }} />
+            {/* Sección de información */}
+            <Stack spacing={2} sx={{ mb: 3 }}>
+              <Paper elevation={0} sx={{
+                p: 2,
+                borderRadius: 2,
+                backgroundColor: theme.colors.paper
+              }}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Person sx={{ color: theme.colors.primary }} />
+                  <Typography sx={{ color: theme.colors.textPrimary }}>
+                    <strong>Usuario:</strong> {user.username}
+                  </Typography>
+                </Stack>
+              </Paper>
 
-        <Box sx={styles.profileItem}>
-          <Person sx={{ mr: 2, color: theme.colors.primary }} />
-          <Typography flexGrow={1}>
-            <span style={styles.labelText}>Nombre de usuario:</span>{' '}
-            <span style={styles.strongText}>{user.username}</span>
-          </Typography>
-        </Box>
+              <Paper elevation={0} sx={{
+                p: 2,
+                borderRadius: 2,
+                backgroundColor: theme.colors.paper
+              }}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Email sx={{ color: theme.colors.primary }} />
+                  <Typography sx={{ color: theme.colors.textPrimary }}>
+                    <strong>Email:</strong> {user.email}
+                  </Typography>
+                </Stack>
+              </Paper>
 
-        <Box sx={styles.profileItem}>
-          <Email sx={{ mr: 2, color: theme.colors.primary }} />
-          <Typography flexGrow={1}>
-            <span style={styles.labelText}>Email:</span>{' '}
-            <span style={styles.strongText}>{user.email}</span>
-          </Typography>
-        </Box>
+              <Paper elevation={0} sx={{
+                p: 2,
+                borderRadius: 2,
+                backgroundColor: theme.colors.paper
+              }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Security sx={{ color: theme.colors.primary }} />
+                    <Typography sx={{ color: theme.colors.textPrimary }}>
+                      <strong>Plan Actual:</strong> {planDetails[user.plan]?.name}
+                    </Typography>
+                  </Stack>
+                  <Button 
+                    variant="outlined"
+                    size="small"
+                    onClick={() => navigate('/planes')}
+                    sx={{ 
+                      color: theme.colors.primary,
+                      borderColor: theme.colors.primary
+                    }}
+                  >
+                    Cambiar
+                  </Button>
+                </Stack>
+              </Paper>
+            </Stack>
 
-        <Box sx={styles.profileItem}>
-          <Security sx={{ mr: 2, color: theme.colors.primary }} />
-          <Typography flexGrow={1}>
-            <span style={styles.labelText}>Tipo de plan:</span>{' '}
-            <span style={styles.strongText}>{user.plan}</span>
-          </Typography>
-          <Button 
-            variant="outlined"
-            onClick={() => navigate('/planes')}
-            sx={styles.outlinedButton}
-          >
-            Cambiar Plan
-          </Button>
-        </Box>
+            {/* Configuración de tema */}
+            <Paper elevation={0} sx={{
+              p: 2,
+              borderRadius: 2,
+              mb: 3,
+              backgroundColor: theme.colors.paper
+            }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Stack direction="row" spacing={2} alignItems="center">
+                  {theme.isDarkMode ? (
+                    <DarkMode sx={{ color: theme.colors.primary }} />
+                  ) : (
+                    <LightMode sx={{ color: theme.colors.primary }} />
+                  )}
+                  <Typography sx={{ color: theme.colors.textPrimary }}>
+                    Modo {theme.isDarkMode ? 'Oscuro' : 'Claro'}
+                  </Typography>
+                </Stack>
+                <Switch
+                  checked={theme.isDarkMode}
+                  onChange={theme.toggleTheme}
+                  color="primary"
+                />
+              </Stack>
+            </Paper>
 
-        <Divider sx={{ my: 3, borderColor: theme.colors.divider }} />
-
-        <Box sx={styles.profileItem}>
-          {theme.isDarkMode ? (
-            <DarkMode sx={{ mr: 2, color: theme.colors.primaryLight }} />
-          ) : (
-            <LightMode sx={{ mr: 2, color: theme.colors.primary }} />
-          )}
-          <Typography flexGrow={1}>
-            <span style={styles.labelText}>Modo:</span>{' '}
-            <span style={styles.strongText}>{theme.isDarkMode ? 'Oscuro' : 'Claro'}</span>
-          </Typography>
-          <Switch
-            checked={theme.isDarkMode}
-            onChange={theme.toggleTheme}
-            color="primary"
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Button 
-            variant="contained"
-            sx={{
-              bgcolor: theme.colors.error,
-              color: '#fff',
-              '&:hover': { bgcolor: theme.isDarkMode ? '#D32F2F' : '#B71C1C' }
-            }}
-            onClick={() => {
-              localStorage.removeItem('coindunk_token');
-              localStorage.removeItem('coindunk_user');
-              navigate('/login');
-            }}
-          >
-            Cerrar Sesión
-          </Button>
-        </Box>
-      </Paper>
+            {/* Botón de cerrar sesión */}
+            <Button 
+              fullWidth
+              variant="contained"
+              startIcon={<Logout />}
+              onClick={() => {
+                localStorage.removeItem('coindunk_token');
+                localStorage.removeItem('coindunk_user');
+                navigate('/login');
+              }}
+              sx={{ 
+                py: 1.5,
+                backgroundColor: theme.colors.error
+              }}
+            >
+              Cerrar Sesión
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
     </Box>
   );
 };
