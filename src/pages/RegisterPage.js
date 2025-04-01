@@ -412,6 +412,8 @@ function RegisterPage() {
             </Box>
         </Box>
     );
+
+    
 }
 
 export default RegisterPage;
