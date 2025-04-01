@@ -75,17 +75,56 @@ INSERT INTO cryptocurrencies (crypto_name, symbol) VALUES
 ('Polkadot', 'DOT'),
 ('Tether', 'USDT'),
 ('Ripple', 'XRP'),
-('Dogecoin', 'DOGE');
+('Dogecoin', 'DOGE'),
+('Binance Coin', 'BNB'),
+('Litecoin', 'LTC'),
+('Chainlink', 'LINK'),
+('Polygon', 'MATIC'),
+('Stellar', 'XLM'),
+('Uniswap', 'UNI'),
+('Avalanche', 'AVAX'),
+('Cosmos', 'ATOM'),
+('Monero', 'XMR'),
+('Algorand', 'ALGO'),
+('VeChain', 'VET'),
+('Filecoin', 'FIL'),
+('Tron', 'TRX'),
+('EOS', 'EOS');
 
--- Usuario de ejemplo 
+
+-- Usuarios de ejemplo 
 INSERT INTO users (username, email, password_hash) VALUES
-('user', 'user@coindunk.com', 'user');
+('user', 'user@coindunk.com', 'user'),
+('user2', 'user2@coindunk.com', 'user2'),
+('user3', 'user3@coindunk.com', 'user3');
 
--- Asignar plan básico al usuario de ejemplo
-INSERT INTO user_plans (user_id, plan_id) VALUES (1, 1);
+-- Asignación de planes
+INSERT INTO user_plans (user_id, plan_id) VALUES 
+(1, 1),  -- user con plan básico
+(2, 2),  -- user2 con plan Dunk Pro
+(3, 3);  -- pro_trader con plan premium
 
--- Asignar criptomonedas al usuario de ejemplo
+-- Asignación de criptomonedas a usuarios
+-- User 1 (básico)
 INSERT INTO user_cryptos (user_id, crypto_id) VALUES
-(1, 1), -- Bitcoin
-(1, 2), -- Ethereum
-(1, 3); -- Cardano
+(1, 1), (1, 2), (1, 3);  -- Bitcoin, Ethereum, Cardano
+
+-- User 2 (Dunk Pro)
+INSERT INTO user_cryptos (user_id, crypto_id) VALUES
+(2, 4),  -- Solana
+(2, 5),  -- Polkadot
+(2, 6),  -- Tether
+(2, 7),  -- Ripple
+(2, 8),  -- Dogecoin
+(2, 9),  -- Binance Coin
+(2, 10), -- Litecoin
+(2, 11), -- Chainlink
+(2, 12), -- Polygon
+(2, 13); -- Stellar
+
+-- User 3 (premium - casi todas)
+INSERT INTO user_cryptos (user_id, crypto_id) VALUES
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
+(3, 6), (3, 7), (3, 8), (3, 9), (3, 10),
+(3, 11), (3, 12), (3, 13), (3, 14), (3, 15),
+(3, 16), (3, 17), (3, 18), (3, 19), (3, 20);
