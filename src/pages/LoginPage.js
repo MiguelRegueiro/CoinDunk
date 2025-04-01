@@ -133,14 +133,14 @@ function LoginPage() {
                 <img 
                     src="CoinDunkNB.png" 
                     alt="Logo" 
-                    className="logo-planes"
+                    className="logo-planeslogin"
                     style={{ maxWidth: '200px', marginBottom: '20px' }}
                 />
 
                 <Typography variant="h4" sx={{ 
                     fontWeight: 'bold', 
                     mb: 3,
-                    color: theme.colors.primary
+                    color: theme.colors.textPrimary
                 }}>
                     Iniciar Sesión
                 </Typography>
@@ -151,7 +151,7 @@ function LoginPage() {
                     </Alert>
                 )}
 
-                <TextField
+<TextField
                     label="Correo Electrónico"
                     type="email"
                     name="email"
@@ -161,7 +161,26 @@ function LoginPage() {
                     margin="normal"
                     required
                     disabled={isLoading}
-                    sx={{ mb: 2 }}
+                    sx={{ 
+                        mb: 2,
+                        '& .MuiInputLabel-root': {
+                            color: theme.colors.textSecondary
+                        },
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: theme.colors.border
+                            },
+                            '&:hover fieldset': {
+                                borderColor: theme.colors.primary
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: theme.colors.primary
+                            },
+                            '& input': {
+                                color: theme.colors.textPrimary // Texto blanco en dark mode
+                            }
+                        }
+                    }}
                 />
 
                 <TextField
@@ -174,7 +193,26 @@ function LoginPage() {
                     margin="normal"
                     required
                     disabled={isLoading}
-                    sx={{ mb: 3 }}
+                    sx={{ 
+                        mb: 3,
+                        '& .MuiInputLabel-root': {
+                            color: theme.colors.textSecondary
+                        },
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: theme.colors.border
+                            },
+                            '&:hover fieldset': {
+                                borderColor: theme.colors.primary
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: theme.colors.primary
+                            },
+                            '& input': {
+                                color: theme.colors.textPrimary // Texto blanco en dark mode
+                            }
+                        }
+                    }}
                 />
 
                 <Box sx={{ position: 'relative' }}>
@@ -222,7 +260,7 @@ function LoginPage() {
                     <Link 
                         component="button"
                         type="button"
-                        onClick={() => navigate('/register')}
+                        onClick={() => navigate('/planes')}
                         sx={{ 
                             color: theme.colors.text,
                             textDecoration: 'none',
@@ -231,7 +269,7 @@ function LoginPage() {
                             }
                         }}
                     >
-                        ¿No tienes cuenta? Regístrate
+                        ¿Aún no tienes cuenta? Descubre nuestros planes
                     </Link>
                 </Box>
             </Box>

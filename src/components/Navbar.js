@@ -3,7 +3,8 @@ import { AppBar, Toolbar, Button, Typography, Box, IconButton, Avatar, Menu, Men
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import LoginIcon from '@mui/icons-material/Login';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import StarIcon from '@mui/icons-material/Star';
 import { ThemeContext } from '../context/Theme';
 
 const Navbar = () => {
@@ -46,6 +47,10 @@ const Navbar = () => {
 
   const handleLogin = () => {
     navigate('/login');
+  };
+
+  const handlePlans = () => {
+    navigate('/planes');
   };
 
   const handleLogout = () => {
@@ -99,7 +104,7 @@ const Navbar = () => {
 
         {/* Enlaces de navegación */}
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          {user && (
+          {user ? (
             <>
               <Button
                 component={Link}
@@ -158,24 +163,78 @@ const Navbar = () => {
                 Contacto
               </Button>
             </>
+          ) : (
+            <>
+              {/* Botón para cambiar el tema */}
+              <IconButton
+                onClick={theme.toggleTheme}
+                color="inherit"
+                sx={{
+                  '&:hover': {
+                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                  },
+                }}
+              >
+                {theme.isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
+
+              {/* Botón de Planes - Versión mejorada */}
+              <Button
+                variant="outlined"
+                startIcon={<StarIcon sx={{ 
+                  color: theme.isDarkMode ? theme.colors.primary : '#2c3e50'
+                }} />}
+                onClick={handlePlans}
+                sx={{
+                  color: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
+                  borderColor: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
+                  backgroundColor: theme.isDarkMode ? 'transparent' : 'rgba(255, 255, 255, 0.9)',
+                  textTransform: 'none',
+                  fontSize: '0.875rem',
+                  padding: '6px 12px',
+                  borderRadius: '20px',
+                  fontWeight: 'medium',
+                  '&:hover': {
+                    backgroundColor: theme.isDarkMode ? 
+                      theme.colors.primary + '20' : 
+                      'rgba(255, 255, 255, 1)',
+                    borderColor: theme.isDarkMode ? 
+                      theme.colors.primaryDark : '#1a2a3a',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Planes
+              </Button>
+
+              {/* Botón de Iniciar Sesión */}
+              <Button
+                variant="contained"
+                startIcon={<VpnKeyIcon />}
+                onClick={handleLogin}
+                sx={{
+                  backgroundColor: theme.colors.primary,
+                  color: '#fff',
+                  textTransform: 'none',
+                  fontSize: '0.875rem',
+                  padding: '6px 16px',
+                  borderRadius: '20px',
+                  fontWeight: 'bold',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    backgroundColor: theme.colors.primaryDark,
+                    boxShadow: '0 2px 8px ' + theme.colors.primary + '80',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Iniciar Sesión
+              </Button>
+            </>
           )}
 
-          {/* Botón para cambiar el tema */}
-          <IconButton
-            onClick={theme.toggleTheme}
-            color="inherit"
-            sx={{
-              marginLeft: 2,
-              '&:hover': {
-                backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
-              },
-            }}
-          >
-            {theme.isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-
-          {/* Menú de usuario o botón de login */}
-          {user ? (
+          {/* Menú de usuario */}
+          {user && (
             <>
               <IconButton
                 onClick={handleMenuOpen}
@@ -224,31 +283,6 @@ const Navbar = () => {
                 </MenuItem>
               </Menu>
             </>
-          ) : (
-            <Button
-              variant="contained"
-              startIcon={<LoginIcon />}
-              onClick={handleLogin}
-              sx={{
-                backgroundColor: theme.colors.primary,
-                color: '#fff',
-                textTransform: 'none',
-                fontSize: '0.875rem',
-                marginLeft: 2,
-                padding: '8px 16px',
-                borderRadius: '4px',
-                fontWeight: 'bold',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                '&:hover': {
-                  backgroundColor: theme.colors.primaryDark,
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                  transform: 'translateY(-1px)',
-                },
-                transition: 'all 0.3s ease',
-              }}
-            >
-              Iniciar Sesión
-            </Button>
           )}
         </Box>
       </Toolbar>

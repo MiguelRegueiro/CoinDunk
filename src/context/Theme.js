@@ -58,7 +58,10 @@ export const ThemeProvider = ({ children }) => {
       button: isDarkMode ? '#FFA726' : '#E67E22',
       buttonHover: isDarkMode ? '#FF9800' : '#D35400',
       inputBackground: isDarkMode ? '#2D2D2D' : '#FFFFFF',
-      inputBorder: isDarkMode ? '#424242' : '#E0E0E0'
+      inputBorder: isDarkMode ? '#424242' : '#E0E0E0', // <-- Coma añadida aquí
+
+      textOnPrimary: isDarkMode ? '#121212' : '#FFFFFF', // Texto sobre fondos primary
+      textOnSecondary: isDarkMode ? '#121212' : '#FFFFFF' // Texto sobre fondos secondary
     },
   };
 

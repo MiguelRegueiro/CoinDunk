@@ -6,9 +6,20 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-  .logo-planes {
-    width: 220px; /* Ancho fijo */
-    height: 200px; /* Alto fijo */
-  }
+.logo-planeslogin {
+    width: 240px;
+    height: 180px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Estilos para los alerts en dark mode */
+.MuiAlert-standardError {
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.MuiAlert-message {
+    color: inherit !important;
+}
