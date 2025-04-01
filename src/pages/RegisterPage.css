@@ -1,0 +1,108 @@
+/* src/pages/RegisterPage.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logo-planesregister {
+    width: 240px;
+    height: 180px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    margin-bottom: 20px;
+}
+
+/* Estilos para los alerts en dark mode */
+.MuiAlert-standardError {
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.MuiAlert-message {
+    color: inherit !important;
+}
+
+/* Estilos específicos para el registro */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 64px); /* Resta la altura del navbar */
+    padding-top: 64px; /* Compensa el navbar fijo */
+    box-sizing: border-box;
+}
+
+.register-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.plan-selector {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.plan-option {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.plan-option:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.plan-option.selected {
+    background-color: rgba(230, 126, 34, 0.2);
+    border-left: 3px solid #e67e22;
+}
+
+.register-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.login-link {
+    display: block;
+    margin-top: 20px;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* Adaptaciones para dark mode */
+body.dark-mode .register-form {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .plan-selector {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.light-mode .plan-option.selected {
+    background-color: rgba(230, 126, 34, 0.1);
+}

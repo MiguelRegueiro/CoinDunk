@@ -1,8 +1,11 @@
 .home-container {
-  padding: 40px 20px;
-  text-align: center;
+  padding: 2.5rem 1.5rem;
   min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
@@ -22,77 +25,339 @@
 .logohome {
   width: 60px;
   height: 60px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .app-name {
   font-size: 32px;
   font-weight: 700;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
+/* ===== CHART CONTAINER ===== */
 .chart-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 15px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-elevation);
+  backdrop-filter: blur(10px);
   background-color: var(--card-background);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chart-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chart-container h2 span {
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 .chart-wrapper {
-  height: 300px;
+  height: 400px;
   position: relative;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
+/* ===== TIME RANGE SELECTOR ===== */
 .time-range-selector {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
 .time-range-button {
-  padding: 10px 20px;
+  padding: 0.625rem 1.25rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.25px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  box-shadow: var(--button-shadow);
 }
 
+.time-range-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--button-hover-shadow);
+}
+
+.time-range-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.time-range-button.active {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+/* ===== CRYPTO SELECTOR ===== */
 .crypto-selector {
-  margin: 40px 0;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  text-align: center; /* Añade esta línea */
+}
+
+.crypto-selector h3 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  /* Elimina cualquier propiedad text-align o margin que pueda estar causando el desalineamiento */
+  display: inline-block; /* Esto ayuda con el pseudo-elemento ::after */
+  position: relative;
+  padding-bottom: 0.5rem;
+  width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.crypto-selector h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 3px;
 }
 
 .crypto-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 1rem;
   flex-wrap: wrap;
+  margin-top: 1.5rem;
 }
 
-.crypto-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
+/* ===== INFO CONTAINER ===== */
 .info-container {
-  margin-top: 40px;
+  width: 100%;
+  max-width: 600px;
+  margin: 2.5rem auto 0;
+  padding: 1.75rem;
+  border-radius: 1rem;
+  background-color: var(--paper-color);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s ease;
 }
 
-/* Responsive Design */
+.info-container:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.info-container > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.info-container span {
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.5px;
+  background-color: var(--primary-light);
+  color: var(--text-on-primary);
+}
+
+.info-container p {
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.info-container a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+.info-container a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(230, 126, 34, 0.4);
+}
+
+/* ===== LOADING STATES ===== */
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--spinner-track);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: relative;
+}
+
+.spinner::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 4px solid transparent;
+  border-radius: 50%;
+  border-top-color: var(--secondary-color);
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== THEME VARIABLES ===== */
+:root {
+  --shadow-elevation: 0 12px 28px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04);
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.1);
+  --button-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --button-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --card-background: rgba(255, 255, 255, 0.9);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --paper-color: #f8f9fa;
+  --button-bg: #f1f3f5;
+  --button-text: #495057;
+  --spinner-track: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+  --shadow-elevation: 0 12px 28px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.24);
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.35);
+  --button-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  --button-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --card-background: rgba(30, 30, 30, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --paper-color: #2d2d2d;
+  --button-bg: #3d3d3d;
+  --button-text: #e0e0e0;
+  --spinner-track: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    height: 350px;
+  }
+}
+
 @media (max-width: 768px) {
+  .home-container {
+    padding: 2rem 1.25rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .app-name {
+    font-size: 1.875rem;
+  }
+  
   .chart-container {
-    padding: 10px;
+    padding: 1.5rem;
+    border-radius: 1rem;
   }
 
   .time-range-selector {
-    flex-direction: column;
+    flex-wrap: wrap;
   }
 
+  .time-range-button {
+    padding: 0.5rem 1rem;
+  }
+  
   .crypto-buttons {
-    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .info-container {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .logohome {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .app-name {
+    font-size: 1.625rem;
+  }
+  
+  .chart-container {
+    padding: 1.25rem;
+    border-radius: 0.875rem;
+  }
+  
+  .chart-wrapper {
+    height: 300px;
+  }
+  
+  .time-range-button {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+  }
+  
+  .crypto-selector h3 {
+    font-size: 1.25rem;
+  }
+  
+  .info-container {
+    padding: 1.25rem;
   }
 }

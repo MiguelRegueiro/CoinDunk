@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { ThemeContext } from '../context/Theme';
 import { Line } from 'react-chartjs-2';
 import {
@@ -12,8 +12,11 @@ import {
   Legend,
 } from 'chart.js';
 import './Home.css';
+import CryptoButton from '../components/CryptoButton';
+import { generatePredictions } from '../components/predictions';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-// Registra los componentes de Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,74 +27,153 @@ ChartJS.register(
   Legend
 );
 
+// Datos de planes fuera del componente para evitar recreación
+const planInfo = {
+  basic: { 
+    name: 'Básico', 
+    maxCryptos: 3,
+    color: 'default',
+    description: '3 criptomonedas'
+  },
+  pro: { 
+    name: 'Profesional', 
+    maxCryptos: 10,
+    color: 'primary',
+    description: '10 criptomonedas'
+  },
+  premium: { 
+    name: 'Premium', 
+    maxCryptos: 999,
+    color: 'secondary',
+    description: 'Ilimitado'
+  },
+};
+
 const Home = () => {
-  const [userPlan, setUserPlan] = useState('basic');
+  const [userData, setUserData] = useState(null);
+  const [userPlan, setUserPlan] = useState(null);
   const [cryptos, setCryptos] = useState([]);
-  const [selectedCrypto, setSelectedCrypto] = useState('Bitcoin');
+  const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [timeRange, setTimeRange] = useState('1D');
+  const [predictions, setPredictions] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPrice, setCurrentPrice] = useState(0);
+  const [maxCryptos, setMaxCryptos] = useState(3);
+  const [planDetails, setPlanDetails] = useState({});
   const theme = useContext(ThemeContext);
+  const navigate = useNavigate();
 
-  // Simulación de la obtención del plan del usuario
-  useEffect(() => {
-    const fetchUserPlan = async () => {
-      const plan = 'basic'; // Cambia a 'pro' o 'premium' para probar otros planes
-      setUserPlan(plan);
-    };
-
-    fetchUserPlan();
+  // Función para seleccionar criptomoneda (memoizada)
+  const handleCryptoSelect = useCallback(async (cryptoName) => {
+    setIsLoading(true);
+    setSelectedCrypto(cryptoName);
+    localStorage.setItem('selectedCrypto', cryptoName);
+  
+    try {
+      const predictionData = await generatePredictions(cryptoName);
+      setPredictions(predictionData.predictions);
+      setCurrentPrice(predictionData.currentPrice);
+      localStorage.setItem('lastPredictions', JSON.stringify(predictionData));
+    } catch (error) {
+      console.error("Error generando predicciones:", error);
+      setPredictions({
+        "1D": [{date: new Date().toISOString(), price: 42000}],
+        "1W": [{date: new Date().toISOString(), price: 42000}],
+        "1M": [{date: new Date().toISOString(), price: 42000}]
+      });
+      setCurrentPrice(42000);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  // Filtra las criptomonedas según el plan del usuario
-  useEffect(() => {
-    const cryptoData = [
-      { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
-      { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
-      { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
-      { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
-      { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
-    ];
+  // Función para obtener datos del usuario (memoizada)
+  const fetchUserData = useCallback(async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('coindunk_user'));
+      if (!storedUser?.id) {
+        navigate('/login');
+        return;
+      }
+      
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:5000/api/user/${storedUser.id}/cryptos`,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('coindunk_token')}`
+          }
+        }
+      );
+      
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Error al obtener datos');
+      }
 
-    if (userPlan === 'basic') {
-      setCryptos(cryptoData.slice(0, 3));
-    } else if (userPlan === 'pro') {
-      setCryptos(cryptoData.slice(0, 10));
-    } else if (userPlan === 'premium') {
-      setCryptos(cryptoData);
+      const { cryptos, plan } = response.data;
+      const planData = planInfo[plan.name.toLowerCase()] || planInfo.basic;
+      
+      setUserData(storedUser);
+      setPlanDetails(planData);
+      setUserPlan(planData.name);
+      setMaxCryptos(plan.maxCryptos);
+      setCryptos(cryptos);
+      
+      const savedCrypto = localStorage.getItem('selectedCrypto');
+      const defaultCrypto = cryptos.length > 0 ? cryptos[0].name : null;
+      
+      if (defaultCrypto) {
+        const cryptoToSelect = savedCrypto && cryptos.some(c => c.name === savedCrypto) 
+          ? savedCrypto 
+          : defaultCrypto;
+        
+        setSelectedCrypto(cryptoToSelect);
+        await handleCryptoSelect(cryptoToSelect);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      if (error.response?.status === 401) {
+        localStorage.removeItem('coindunk_user');
+        localStorage.removeItem('coindunk_token');
+        navigate('/login');
+      }
+    } finally {
+      setIsLoading(false);
     }
-  }, [userPlan]);
+  }, [navigate, handleCryptoSelect]);
 
-  // Función para manejar la selección de una criptomoneda
-  const handleCryptoSelect = (cryptoName) => {
-    setSelectedCrypto(cryptoName);
-  };
+  // Efecto principal con cancelación de petición
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-  // Función para manejar el cambio de rango de tiempo
+    const fetchData = async () => {
+      await fetchUserData();
+    };
+
+    fetchData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [fetchUserData]);
+
+  // Función para cambiar el rango de tiempo
   const handleTimeRangeChange = (range) => {
     setTimeRange(range);
   };
 
-  // Datos simulados para el gráfico según el rango de tiempo
+  // Generar datos para el gráfico
   const getChartData = () => {
-    let labels = [];
-    let data = [];
-
-    switch (timeRange) {
-      case '1D': // Predicciones para 1 día
-        labels = ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7'];
-        data = [41000, 41500, 42000, 41800, 42200, 42500, 43000];
-        break;
-      case '1W': // Predicciones para 1 semana
-        labels = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7'];
-        data = [40000, 40500, 41000, 41500, 42000, 42500, 43000];
-        break;
-      case '1M': // Predicciones para 1 mes
-        labels = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4'];
-        data = [38000, 39000, 40000, 42000];
-        break;
-      default:
-        labels = [];
-        data = [];
-    }
+    const selectedData = predictions[timeRange] || [];
+    const labels = selectedData.map((entry) => {
+      const date = new Date(entry.date);
+      return timeRange === '1D'
+        ? `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}h`
+        : date.toLocaleDateString();
+    });
+    
+    const data = selectedData.map((entry) => entry.price);
 
     return {
       labels,
@@ -100,9 +182,16 @@ const Home = () => {
           label: `Predicción de precio para ${selectedCrypto}`,
           data,
           borderColor: theme.colors.primary,
-          backgroundColor: theme.isDarkMode ? 'rgba(255, 165, 0, 0.1)' : 'rgba(230, 126, 34, 0.1)',
+          backgroundColor: theme.isDarkMode 
+            ? 'rgba(255, 167, 38, 0.2)' 
+            : 'rgba(230, 126, 34, 0.2)',
           fill: true,
           tension: 0.4,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          borderWidth: 2,
+          pointBackgroundColor: theme.colors.primary,
+          pointBorderColor: '#fff'
         },
       ],
     };
@@ -116,42 +205,81 @@ const Home = () => {
       legend: {
         position: 'top',
         labels: {
-          color: theme.colors.text,
+          color: theme.colors.textPrimary,
+          font: {
+            size: 14
+          }
         },
       },
       title: {
         display: true,
         text: `Predicción de precios para ${selectedCrypto} (${timeRange})`,
-        color: theme.colors.text,
+        color: theme.colors.textPrimary,
+        font: {
+          size: 16,
+          weight: 'bold'
+        }
       },
       tooltip: {
-        backgroundColor: theme.colors.cardBackground,
-        titleColor: theme.colors.text,
-        bodyColor: theme.colors.text,
+        backgroundColor: theme.colors.surface,
+        titleColor: theme.colors.textPrimary,
+        bodyColor: theme.colors.textPrimary,
+        borderColor: theme.colors.primary,
+        borderWidth: 1,
+        padding: 12,
+        callbacks: {
+          label: (context) => {
+            return `$${context.parsed.y.toFixed(2)}`;
+          }
+        }
       },
     },
     scales: {
       x: {
         grid: {
-          color: theme.colors.border,
+          color: theme.colors.divider,
+          drawBorder: false
         },
         ticks: {
-          color: theme.colors.text,
+          color: theme.colors.textSecondary,
+          maxRotation: 45,
+          minRotation: 45
         },
       },
       y: {
         grid: {
-          color: theme.colors.border,
+          color: theme.colors.divider,
+          drawBorder: false
         },
         ticks: {
-          color: theme.colors.text,
+          color: theme.colors.textSecondary,
+          callback: (value) => `$${value}`
         },
       },
     },
   };
 
+  // Estados de carga
   if (!theme) {
-    return <div>Cargando...</div>;
+    return <div className="loading-screen">Cargando tema...</div>;
+  }
+
+  if (!userData) {
+    return (
+      <div className="loading-screen" style={{ backgroundColor: theme.colors.background }}>
+        <div className="spinner" style={{ borderTopColor: theme.colors.primary }} />
+        <p style={{ color: theme.colors.textPrimary }}>Verificando autenticación...</p>
+      </div>
+    );
+  }
+
+  if (isLoading && !selectedCrypto) {
+    return (
+      <div className="loading-screen" style={{ backgroundColor: theme.colors.background }}>
+        <div className="spinner" style={{ borderTopColor: theme.colors.primary }} />
+        <p style={{ color: theme.colors.textPrimary }}>Cargando tus criptomonedas...</p>
+      </div>
+    );
   }
 
   return (
@@ -159,82 +287,177 @@ const Home = () => {
       className="home-container"
       style={{
         backgroundColor: theme.colors.background,
-        color: theme.colors.text,
+        color: theme.colors.textPrimary,
       }}
     >
-      {/* Encabezado con logo y nombre */}
       <div className="header">
         <div className="header-content">
-          <img src={"CoinDunkNB.png"} alt="Logo de CoinDunk" className="logohome" />
-          <h1 className="app-name">Predicciones de Criptomonedas</h1>
+          <img 
+            src="CoinDunkNB.png" 
+            alt="Logo de CoinDunk" 
+            className="logohome" 
+            style={{ filter: theme.isDarkMode ? 'brightness(0.8)' : 'brightness(1)' }}
+          />
+          <h1 className="app-name" style={{ color: theme.colors.textPrimary }}>
+            Predicciones de Criptomonedas
+          </h1>
         </div>
       </div>
 
-      {/* Gráfico de la criptomoneda seleccionada */}
-      <div className="chart-container">
+      <div 
+        className="chart-container"
+        style={{
+          backgroundColor: theme.colors.surface,
+          boxShadow: theme.colors.shadow,
+          border: `1px solid ${theme.colors.border}`
+        }}
+      >
         <h2 style={{ color: theme.colors.primary }}>
-          Predicciones de precios para {selectedCrypto}
+          Predicciones de precios para {selectedCrypto || '...'}
+          {currentPrice > 0 && (
+            <span style={{ 
+              fontSize: '1rem', 
+              marginLeft: '10px',
+              color: theme.colors.textSecondary
+            }}>
+              (Actual: ${currentPrice.toFixed(2)})
+            </span>
+          )}
         </h2>
+        
         <div className="chart-wrapper">
-          <Line data={getChartData()} options={chartOptions} height={300} />
+          {isLoading ? (
+            <div className="loading-indicator">
+              <div 
+                className="spinner" 
+                style={{ 
+                  borderTopColor: theme.colors.primary,
+                  borderColor: theme.colors.divider
+                }}
+              />
+              <p style={{ color: theme.colors.textSecondary }}>
+                Generando predicciones...
+              </p>
+            </div>
+          ) : (
+            <Line data={getChartData()} options={chartOptions} height={300} />
+          )}
         </div>
-        {/* Selector de rango de tiempo */}
+        
         <div className="time-range-selector">
           {['1D', '1W', '1M'].map((range) => (
             <button
               key={range}
-              className={`time-range-button ${
-                timeRange === range ? 'active' : ''
-              }`}
+              className={`time-range-button ${timeRange === range ? 'active' : ''}`}
               style={{
-                backgroundColor: timeRange === range ? theme.colors.primary : theme.colors.cardBackground,
-                color: timeRange === range ? '#fff' : theme.colors.text,
+                backgroundColor: timeRange === range 
+                  ? theme.colors.primary 
+                  : theme.colors.paper,
+                color: timeRange === range ? '#fff' : theme.colors.textPrimary,
+                border: `1px solid ${theme.colors.border}`,
+                transition: 'all 0.3s ease'
               }}
               onClick={() => handleTimeRangeChange(range)}
+              disabled={isLoading}
             >
               {range === '1D' ? '1 Día' : range === '1W' ? '1 Semana' : '1 Mes'}
             </button>
           ))}
         </div>
-        <p style={{ color: theme.colors.secondaryText, marginTop: '10px' }}>
-          Los datos mostrados son predicciones simuladas basadas en modelos avanzados.
+        
+        <p style={{ 
+          color: theme.colors.textSecondary, 
+          marginTop: '10px',
+          opacity: 0.8
+        }}>
+          Predicciones basadas en el precio actual y volatilidad histórica.
+          {isLoading && ' Actualizando...'}
         </p>
       </div>
 
-      {/* Selector de criptomonedas */}
       <div className="crypto-selector">
-        <h3 style={{ color: theme.colors.primary }}>Selecciona una criptomoneda:</h3>
+        <h3 style={{ color: theme.colors.primary }}>
+          Tus criptomonedas ({cryptos.length}/{maxCryptos})
+        </h3>
         <div className="crypto-buttons">
           {cryptos.map((crypto) => (
-            <button
+            <CryptoButton
               key={crypto.id}
-              className={`crypto-button ${
-                selectedCrypto === crypto.name ? 'active' : ''
-              }`}
-              style={{
-                backgroundColor: selectedCrypto === crypto.name ? theme.colors.primary : theme.colors.cardBackground,
-                color: selectedCrypto === crypto.name ? '#fff' : theme.colors.text,
-              }}
-              onClick={() => handleCryptoSelect(crypto.name)}
-            >
-              {crypto.name} ({crypto.symbol})
-            </button>
+              crypto={crypto}
+              selectedCrypto={selectedCrypto}
+              theme={theme}
+              handleCryptoSelect={handleCryptoSelect}
+              disabled={isLoading}
+            />
           ))}
         </div>
       </div>
 
-      {/* Información adicional */}
-      <div className="info-container">
-        <p style={{ color: theme.colors.secondaryText }}>
-          Usando el plan: <strong>{userPlan}</strong>.
+      <div 
+        className="info-container"
+        style={{
+          backgroundColor: theme.colors.paper,
+          border: `1px solid ${theme.colors.border}`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '15px',
+          borderRadius: '8px',
+          marginTop: '20px'
+        }}
+      >
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          marginBottom: '10px'
+        }}>
+          <span style={{ 
+            marginRight: '10px',
+            fontSize: '1.2rem',
+            color: theme.colors.textPrimary
+          }}>
+            Plan actual:
+          </span>
+          <span style={{
+            padding: '5px 10px',
+            borderRadius: '20px',
+            backgroundColor: theme.colors.primary + '20',
+            color: theme.colors.primary,
+            fontWeight: 'bold',
+            textTransform: 'uppercase'
+          }}>
+            {userPlan || '...'}
+          </span>
+        </div>
+        
+        <p style={{ 
+          color: theme.colors.textSecondary,
+          textAlign: 'center',
+          marginBottom: '10px'
+        }}>
+          {planDetails.description || 'Cargando detalles del plan...'}
         </p>
-        {userPlan === 'basic' && (
-          <p style={{ color: theme.colors.secondaryText }}>
-            ¿Quieres ver más criptomonedas?{' '}
-            <a href="/planes" style={{ color: theme.colors.primary }}>
-              Actualiza tu plan
-            </a>
-          </p>
+        
+        {userPlan && userPlan.toLowerCase() !== 'premium' && (
+          <a 
+            href="/planes" 
+            style={{ 
+              color: theme.colors.primary,
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '8px 15px',
+              borderRadius: '5px',
+              backgroundColor: theme.colors.primary + '10',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                backgroundColor: theme.colors.primary + '20'
+              }
+            }}
+          >
+            Actualizar plan
+          </a>
         )}
       </div>
     </div>

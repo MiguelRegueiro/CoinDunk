@@ -1,21 +1,26 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { ThemeContext } from '../context/Theme'; // Importa el contexto del tema
-import './Planes.css'; // Archivo de estilos
+import { Link, useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../context/Theme';
+import './Planes.css';
 
 const Planes = () => {
-  const theme = useContext(ThemeContext); // Accede al tema
+  const theme = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   if (!theme) {
-    return null; // O muestra un mensaje de carga
+    return null;
   }
+
+  const handlePlanSelect = (plan) => {
+    navigate('/register', { state: { selectedPlan: plan } });
+  };
 
   return (
     <div
       className="planes-container"
       style={{
-        backgroundColor: theme.colors.background, // Fondo dinámico
-        color: theme.colors.text, // Texto dinámico
+        backgroundColor: theme.colors.background,
+        color: theme.colors.text,
       }}
     >
       {/* Encabezado con logo y texto */}
@@ -23,7 +28,7 @@ const Planes = () => {
         <img
           src="CoinDunkNB.png"
           alt="Logo"
-          className="logo-planes" // Clase específica para el logo en Planes
+          className="logo-planes"
         />
         <div className="header-text">
           <h1>Bienvenido a CoinDunk</h1>
@@ -39,9 +44,9 @@ const Planes = () => {
         <div
           className="plan-card"
           style={{
-            backgroundColor: theme.colors.cardBackground, // Fondo de tarjetas dinámico
-            color: theme.colors.text, // Texto dinámico
-            border: `1px solid ${theme.colors.border}`, // Borde dinámico
+            backgroundColor: theme.colors.cardBackground,
+            color: theme.colors.text,
+            border: `1px solid ${theme.colors.border}`,
           }}
         >
           <h2>Básico</h2>
@@ -56,18 +61,18 @@ const Planes = () => {
             <li>Accede a predicciones de 3 criptomonedas de tu elección</li>
           </ul>
           <div className="button-container">
-            <Link
-              to="/prediction-basic"
+            <button
+              onClick={() => handlePlanSelect('basic')}
               className="plan-button"
               style={{
-                backgroundColor: theme.colors.button, // Color del botón dinámico
-                color: '#fff', // Texto blanco
+                backgroundColor: theme.colors.button,
+                color: theme.colors.textOnPrimary,
               }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)} // Hover
-              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)} // Restaurar color
+              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)}
+              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)}
             >
               Comenzar con Básico
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -75,9 +80,9 @@ const Planes = () => {
         <div
           className="plan-card"
           style={{
-            backgroundColor: theme.colors.cardBackground, // Fondo de tarjetas dinámico
-            color: theme.colors.text, // Texto dinámico
-            border: `1px solid ${theme.colors.border}`, // Borde dinámico
+            backgroundColor: theme.colors.cardBackground,
+            color: theme.colors.text,
+            border: `1px solid ${theme.colors.border}`,
           }}
         >
           <h2>Dunk Pro</h2>
@@ -92,18 +97,18 @@ const Planes = () => {
             <li>Recibe predicciones de 10 criptomonedas</li>
           </ul>
           <div className="button-container">
-            <Link
-              to="/prediction-pro"
+            <button
+              onClick={() => handlePlanSelect('pro')}
               className="plan-button"
               style={{
-                backgroundColor: theme.colors.button, // Color del botón dinámico
-                color: '#fff', // Texto blanco
+                backgroundColor: theme.colors.button,
+                color: theme.colors.textOnPrimary,
               }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)} // Hover
-              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)} // Restaurar color
+              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)}
+              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)}
             >
               Elegir Dunk Pro
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -111,9 +116,9 @@ const Planes = () => {
         <div
           className="plan-card"
           style={{
-            backgroundColor: theme.colors.cardBackground, // Fondo de tarjetas dinámico
-            color: theme.colors.text, // Texto dinámico
-            border: `1px solid ${theme.colors.border}`, // Borde dinámico
+            backgroundColor: theme.colors.cardBackground,
+            color: theme.colors.text,
+            border: `1px solid ${theme.colors.border}`,
           }}
         >
           <h2>Slam Dunk</h2>
@@ -128,20 +133,67 @@ const Planes = () => {
             <li>Disfruta de acceso ilimitado a más de 100 criptomonedas</li>
           </ul>
           <div className="button-container">
-            <Link
-              to="/prediction-premium"
+            <button
+              onClick={() => handlePlanSelect('premium')}
               className="plan-button"
               style={{
-                backgroundColor: theme.colors.button, // Color del botón dinámico
-                color: '#fff', // Texto blanco
+                backgroundColor: theme.colors.button,
+                color: theme.colors.textOnPrimary,
               }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)} // Hover
-              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)} // Restaurar color
+              onMouseOver={(e) => (e.target.style.backgroundColor = theme.colors.buttonHover)}
+              onMouseOut={(e) => (e.target.style.backgroundColor = theme.colors.button)}
             >
               Ir por Slam Dunk
-            </Link>
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Enlace al login en la parte inferior */}
+      <div className="login-footer" style={{ marginTop: '60px', paddingBottom: '40px' }}>
+        <p style={{ 
+          marginBottom: '16px', 
+          color: theme.isDarkMode ? theme.colors.textSecondary : '#5a5a5a',
+          fontSize: '0.95rem'
+        }}>
+          ¿Ya tienes una cuenta?
+        </p>
+        <Link
+          to="/login"
+          style={{
+            display: 'inline-block',
+            padding: '10px 24px',
+            borderRadius: '20px',
+            textDecoration: 'none',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            transition: 'all 0.3s ease',
+            backgroundColor: theme.isDarkMode ? 'transparent' : '#f8f9fa',
+            color: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
+            border: `1px solid ${theme.isDarkMode ? theme.colors.primary : '#2c3e50'}`,
+            boxShadow: theme.isDarkMode ? 'none' : '0 2px 4px rgba(0,0,0,0.05)',
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = theme.isDarkMode ? 
+              theme.colors.primary + '10' : 
+              '#e9ecef';
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = theme.isDarkMode ? 
+              'none' : 
+              '0 4px 8px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = theme.isDarkMode ? 
+              'transparent' : 
+              '#f8f9fa';
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = theme.isDarkMode ? 
+              'none' : 
+              '0 2px 4px rgba(0,0,0,0.05)';
+          }}
+        >
+          Iniciar sesión
+        </Link>
       </div>
     </div>
   );
