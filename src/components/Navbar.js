@@ -70,13 +70,13 @@ const Navbar = () => {
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: theme.isDarkMode ? '#121212' : '#2c3e50',
+        backgroundColor: theme.isDarkMode ? '#1a1a1a' : '#000000',
         color: '#ffffff',
         boxShadow: 'none',
-        borderBottom: theme.isDarkMode ? '1px solid #333' : '1px solid #34495e',
+        borderBottom: theme.isDarkMode ? '1px solid #2a2a2a' : '1px solid #333',
         width: '100vw',
         zIndex: 1200,
-        height: '60px',
+        height: '64px',
       }}
     >
       <Toolbar
@@ -88,8 +88,10 @@ const Navbar = () => {
           width: '100%',
           margin: '0 auto',
           padding: '0 16px',
+          height: '100%',
         }}
       >
+        {/* Logo y nombre de la aplicación */}
         {/* Logo y nombre de la aplicación */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <img
@@ -103,7 +105,7 @@ const Navbar = () => {
         </Box>
 
         {/* Enlaces de navegación */}
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           {user ? (
             <>
               <Button
@@ -112,9 +114,10 @@ const Navbar = () => {
                 sx={{
                   color: '#fff',
                   textTransform: 'none',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
@@ -126,9 +129,10 @@ const Navbar = () => {
                 sx={{
                   color: '#fff',
                   textTransform: 'none',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
@@ -140,9 +144,10 @@ const Navbar = () => {
                 sx={{
                   color: '#fff',
                   textTransform: 'none',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
@@ -154,9 +159,10 @@ const Navbar = () => {
                 sx={{
                   color: '#fff',
                   textTransform: 'none',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
@@ -171,37 +177,31 @@ const Navbar = () => {
                 color="inherit"
                 sx={{
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
                 {theme.isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              {/* Botón de Planes - Versión mejorada */}
+              {/* Botón de Planes */}
               <Button
                 variant="outlined"
-                startIcon={<StarIcon sx={{ 
-                  color: theme.isDarkMode ? theme.colors.primary : '#2c3e50'
-                }} />}
+                startIcon={<StarIcon sx={{ color: theme.colors.primary }} />}
                 onClick={handlePlans}
                 sx={{
-                  color: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
-                  borderColor: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
-                  backgroundColor: theme.isDarkMode ? 'transparent' : 'rgba(255, 255, 255, 0.9)',
+                  color: theme.colors.primary,
+                  borderColor: theme.colors.primary,
                   textTransform: 'none',
-                  fontSize: '0.875rem',
-                  padding: '6px 12px',
+                  fontSize: '0.9rem',
+                  padding: '6px 16px',
                   borderRadius: '20px',
-                  fontWeight: 'medium',
+                  fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 
-                      theme.colors.primary + '20' : 
-                      'rgba(255, 255, 255, 1)',
-                    borderColor: theme.isDarkMode ? 
-                      theme.colors.primaryDark : '#1a2a3a',
+                    backgroundColor: theme.colors.primary + '15',
+                    borderColor: theme.colors.primaryDark,
                   },
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.2s ease',
                 }}
               >
                 Planes
@@ -214,18 +214,19 @@ const Navbar = () => {
                 onClick={handleLogin}
                 sx={{
                   backgroundColor: theme.colors.primary,
-                  color: '#fff',
+                  color: theme.colors.textOnPrimary,
                   textTransform: 'none',
-                  fontSize: '0.875rem',
+                  fontSize: '0.9rem',
                   padding: '6px 16px',
                   borderRadius: '20px',
-                  fontWeight: 'bold',
+                  fontWeight: 500,
                   boxShadow: 'none',
                   '&:hover': {
                     backgroundColor: theme.colors.primaryDark,
-                    boxShadow: '0 2px 8px ' + theme.colors.primary + '80',
+                    boxShadow: `0 2px 8px ${theme.colors.primary}80`,
                   },
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.2s ease',
+                  ml: 1
                 }}
               >
                 Iniciar Sesión
@@ -240,18 +241,19 @@ const Navbar = () => {
                 onClick={handleMenuOpen}
                 color="inherit"
                 sx={{
-                  marginLeft: 2,
+                  marginLeft: 1,
                   '&:hover': {
-                    backgroundColor: theme.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}
               >
                 <Avatar 
                   sx={{ 
-                    width: 32, 
-                    height: 32, 
+                    width: 36, 
+                    height: 36, 
                     bgcolor: theme.colors.primary,
-                    fontSize: '0.875rem'
+                    fontSize: '1rem',
+                    fontWeight: 500
                   }}
                 >
                   {user.username.charAt(0).toUpperCase()}
@@ -264,9 +266,11 @@ const Navbar = () => {
                 PaperProps={{
                   sx: {
                     backgroundColor: theme.colors.cardBackground,
-                    color: theme.colors.text,
+                    color: theme.colors.textPrimary,
                     marginTop: '8px',
                     minWidth: '200px',
+                    border: `1px solid ${theme.colors.border}`,
+                    boxShadow: theme.colors.shadowIntense,
                   }
                 }}
               >
@@ -275,10 +279,23 @@ const Navbar = () => {
                     navigate('/perfil');
                     handleMenuClose();
                   }}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: theme.colors.primary + '20',
+                    }
+                  }}
                 >
                   Mi Perfil
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>
+                <MenuItem 
+                  onClick={handleLogout}
+                  sx={{
+                    color: theme.colors.error,
+                    '&:hover': {
+                      backgroundColor: theme.colors.error + '20',
+                    }
+                  }}
+                >
                   Cerrar Sesión
                 </MenuItem>
               </Menu>
