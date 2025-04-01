@@ -1,4 +1,4 @@
-// src/utils/predictions.js
+// src/components/predictions.js
 
 // Datos de volatilidad histórica de criptomonedas (porcentaje)
 const cryptoVolatility = {
