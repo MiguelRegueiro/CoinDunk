@@ -59,7 +59,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     const [users] = await pool.query(`
       SELECT 
-        u.user_id, 
+        u.user_id as id, 
         u.username, 
         u.email, 
         u.password_hash,
@@ -81,7 +81,6 @@ app.post('/api/auth/login', async (req, res) => {
 
     const user = users[0];
     
-    // Comparación directa para desarrollo (en producción usar bcrypt)
     if (user.password_hash !== password) {
       return res.status(401).json({ 
         success: false, 
@@ -89,14 +88,13 @@ app.post('/api/auth/login', async (req, res) => {
       });
     }
 
-    // Respuesta exitosa con el plan incluido
     res.json({
       success: true,
       user: {
-        id: user.user_id,
+        id: user.id,
         username: user.username,
         email: user.email,
-        plan: user.plan // Añadido el plan a la respuesta
+        plan: user.plan
       },
       token: 'token_simulado_para_desarrollo'
     });
@@ -111,13 +109,14 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Endpoint para obtener el plan del usuario
-app.get('/api/user/:userId/plan', async (req, res) => {
+// Endpoint para obtener las criptomonedas del usuario
+app.get('/api/user/:userId/cryptos', async (req, res) => {
   try {
     const userId = req.params.userId;
     
+    // Primero obtenemos el plan del usuario para saber el límite
     const [plans] = await pool.query(`
-      SELECT p.plan_name
+      SELECT p.plan_name, p.max_cryptos
       FROM user_plans up
       JOIN plans p ON up.plan_id = p.plan_id
       WHERE up.user_id = ?
@@ -128,17 +127,64 @@ app.get('/api/user/:userId/plan', async (req, res) => {
     if (plans.length === 0) {
       return res.status(404).json({ 
         success: false, 
-        message: 'Plan no encontrado' 
+        message: 'Usuario no tiene plan activo' 
       });
     }
 
+    const userPlan = plans[0];
+    
+    // Obtenemos las criptomonedas activas del usuario
+    const [cryptos] = await pool.query(`
+      SELECT 
+        c.crypto_id as id,
+        c.crypto_name as name,
+        c.symbol
+      FROM user_cryptos uc
+      JOIN cryptocurrencies c ON uc.crypto_id = c.crypto_id
+      WHERE uc.user_id = ?
+      AND uc.is_active = TRUE
+      LIMIT ?
+    `, [userId, userPlan.max_cryptos]);
+    
     res.json({
       success: true,
-      plan: plans[0].plan_name
+      cryptos,
+      plan: {
+        name: userPlan.plan_name,
+        maxCryptos: userPlan.max_cryptos,
+        currentCount: cryptos.length
+      }
     });
 
   } catch (error) {
-    console.error('Error obteniendo plan del usuario:', error);
+    console.error('Error obteniendo criptomonedas del usuario:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error interno del servidor',
+      error: error.message 
+    });
+  }
+});
+
+// Endpoint para obtener todas las criptomonedas disponibles
+app.get('/api/cryptos', async (req, res) => {
+  try {
+    const [cryptos] = await pool.query(`
+      SELECT 
+        crypto_id as id,
+        crypto_name as name,
+        symbol
+      FROM cryptocurrencies
+      ORDER BY crypto_name
+    `);
+    
+    res.json({
+      success: true,
+      cryptos
+    });
+
+  } catch (error) {
+    console.error('Error obteniendo criptomonedas:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error interno del servidor',
@@ -172,7 +218,8 @@ app.use((req, res) => {
     message: 'Ruta no encontrada',
     availableEndpoints: {
       login: 'POST /api/auth/login',
-      userPlan: 'GET /api/user/:userId/plan',
+      userCryptos: 'GET /api/user/:userId/cryptos',
+      allCryptos: 'GET /api/cryptos',
       health: 'GET /api/health'
     }
   });
@@ -182,6 +229,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`🔑 Ruta de login: POST http://localhost:${PORT}/api/auth/login`);
-  console.log(`📋 Ruta de plan de usuario: GET http://localhost:${PORT}/api/user/:userId/plan`);
+  console.log(`💰 Ruta de criptomonedas del usuario: GET http://localhost:${PORT}/api/user/:userId/cryptos`);
+  console.log(`📊 Ruta de todas las criptomonedas: GET http://localhost:${PORT}/api/cryptos`);
   console.log(`🩺 Ruta de salud: GET http://localhost:${PORT}/api/health\n`);
 });

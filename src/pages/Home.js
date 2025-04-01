@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { ThemeContext } from '../context/Theme';
 import { Line } from 'react-chartjs-2';
 import {
@@ -14,6 +14,8 @@ import {
 import './Home.css';
 import CryptoButton from '../components/CryptoButton';
 import { generatePredictions } from '../components/predictions';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -25,43 +27,44 @@ ChartJS.register(
   Legend
 );
 
+// Datos de planes fuera del componente para evitar recreación
+const planInfo = {
+  basic: { 
+    name: 'Básico', 
+    maxCryptos: 3,
+    color: 'default',
+    description: '3 criptomonedas'
+  },
+  pro: { 
+    name: 'Profesional', 
+    maxCryptos: 10,
+    color: 'primary',
+    description: '10 criptomonedas'
+  },
+  premium: { 
+    name: 'Premium', 
+    maxCryptos: 999,
+    color: 'secondary',
+    description: 'Ilimitado'
+  },
+};
+
 const Home = () => {
-  const [userPlan, setUserPlan] = useState('basic');
+  const [userData, setUserData] = useState(null);
+  const [userPlan, setUserPlan] = useState(null);
   const [cryptos, setCryptos] = useState([]);
-  const [selectedCrypto, setSelectedCrypto] = useState('Bitcoin');
+  const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [timeRange, setTimeRange] = useState('1D');
   const [predictions, setPredictions] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPrice, setCurrentPrice] = useState(0);
+  const [maxCryptos, setMaxCryptos] = useState(3);
+  const [planDetails, setPlanDetails] = useState({});
   const theme = useContext(ThemeContext);
+  const navigate = useNavigate();
 
-  const cryptoData = [
-    { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 42000, change: '+2.5%' },
-    { id: 2, name: 'Ethereum', symbol: 'ETH', price: 3000, change: '+1.8%' },
-    { id: 3, name: 'Cardano', symbol: 'ADA', price: 2.5, change: '+0.5%' },
-    { id: 4, name: 'Solana', symbol: 'SOL', price: 150, change: '+3.2%' },
-    { id: 5, name: 'Polkadot', symbol: 'DOT', price: 25, change: '+1.1%' },
-  ];
-
-  useEffect(() => {
-    const fetchUserPlan = () => {
-      const plan = 'basic';
-      setUserPlan(plan);
-    };
-    fetchUserPlan();
-  }, []);
-
-  useEffect(() => {
-    if (userPlan === 'basic') {
-      setCryptos(cryptoData.slice(0, 3));
-    } else if (userPlan === 'pro') {
-      setCryptos(cryptoData.slice(0, 10));
-    } else if (userPlan === 'premium') {
-      setCryptos(cryptoData);
-    }
-  }, [userPlan]);
-
-  const handleCryptoSelect = async (cryptoName) => {
+  // Función para seleccionar criptomoneda (memoizada)
+  const handleCryptoSelect = useCallback(async (cryptoName) => {
     setIsLoading(true);
     setSelectedCrypto(cryptoName);
     localStorage.setItem('selectedCrypto', cryptoName);
@@ -82,30 +85,85 @@ const Home = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    const savedCrypto = localStorage.getItem('selectedCrypto');
-    const savedPredictions = localStorage.getItem('lastPredictions');
-    
-    if (savedCrypto && cryptos.some(c => c.name === savedCrypto)) {
-      setSelectedCrypto(savedCrypto);
-      if (savedPredictions) {
-        const parsed = JSON.parse(savedPredictions);
-        setPredictions(parsed.predictions);
-        setCurrentPrice(parsed.currentPrice);
-      } else {
-        handleCryptoSelect(savedCrypto);
-      }
-    } else {
-      handleCryptoSelect('Bitcoin');
-    }
   }, []);
 
+  // Función para obtener datos del usuario (memoizada)
+  const fetchUserData = useCallback(async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('coindunk_user'));
+      if (!storedUser?.id) {
+        navigate('/login');
+        return;
+      }
+      
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:5000/api/user/${storedUser.id}/cryptos`,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('coindunk_token')}`
+          }
+        }
+      );
+      
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Error al obtener datos');
+      }
+
+      const { cryptos, plan } = response.data;
+      const planData = planInfo[plan.name.toLowerCase()] || planInfo.basic;
+      
+      setUserData(storedUser);
+      setPlanDetails(planData);
+      setUserPlan(planData.name);
+      setMaxCryptos(plan.maxCryptos);
+      setCryptos(cryptos);
+      
+      const savedCrypto = localStorage.getItem('selectedCrypto');
+      const defaultCrypto = cryptos.length > 0 ? cryptos[0].name : null;
+      
+      if (defaultCrypto) {
+        const cryptoToSelect = savedCrypto && cryptos.some(c => c.name === savedCrypto) 
+          ? savedCrypto 
+          : defaultCrypto;
+        
+        setSelectedCrypto(cryptoToSelect);
+        await handleCryptoSelect(cryptoToSelect);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      if (error.response?.status === 401) {
+        localStorage.removeItem('coindunk_user');
+        localStorage.removeItem('coindunk_token');
+        navigate('/login');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [navigate, handleCryptoSelect]);
+
+  // Efecto principal con cancelación de petición
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const fetchData = async () => {
+      await fetchUserData();
+    };
+
+    fetchData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [fetchUserData]);
+
+  // Función para cambiar el rango de tiempo
   const handleTimeRangeChange = (range) => {
     setTimeRange(range);
   };
 
+  // Generar datos para el gráfico
   const getChartData = () => {
     const selectedData = predictions[timeRange] || [];
     const labels = selectedData.map((entry) => {
@@ -139,6 +197,7 @@ const Home = () => {
     };
   };
 
+  // Opciones del gráfico
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -200,8 +259,27 @@ const Home = () => {
     },
   };
 
+  // Estados de carga
   if (!theme) {
-    return <div>Cargando...</div>;
+    return <div className="loading-screen">Cargando tema...</div>;
+  }
+
+  if (!userData) {
+    return (
+      <div className="loading-screen" style={{ backgroundColor: theme.colors.background }}>
+        <div className="spinner" style={{ borderTopColor: theme.colors.primary }} />
+        <p style={{ color: theme.colors.textPrimary }}>Verificando autenticación...</p>
+      </div>
+    );
+  }
+
+  if (isLoading && !selectedCrypto) {
+    return (
+      <div className="loading-screen" style={{ backgroundColor: theme.colors.background }}>
+        <div className="spinner" style={{ borderTopColor: theme.colors.primary }} />
+        <p style={{ color: theme.colors.textPrimary }}>Cargando tus criptomonedas...</p>
+      </div>
+    );
   }
 
   return (
@@ -235,8 +313,8 @@ const Home = () => {
         }}
       >
         <h2 style={{ color: theme.colors.primary }}>
-          Predicciones de precios para {selectedCrypto}
-          {currentPrice && (
+          Predicciones de precios para {selectedCrypto || '...'}
+          {currentPrice > 0 && (
             <span style={{ 
               fontSize: '1rem', 
               marginLeft: '10px',
@@ -298,7 +376,9 @@ const Home = () => {
       </div>
 
       <div className="crypto-selector">
-        <h3 style={{ color: theme.colors.primary }}>Selecciona una criptomoneda:</h3>
+        <h3 style={{ color: theme.colors.primary }}>
+          Tus criptomonedas ({cryptos.length}/{maxCryptos})
+        </h3>
         <div className="crypto-buttons">
           {cryptos.map((crypto) => (
             <CryptoButton
@@ -317,25 +397,67 @@ const Home = () => {
         className="info-container"
         style={{
           backgroundColor: theme.colors.paper,
-          border: `1px solid ${theme.colors.border}`
+          border: `1px solid ${theme.colors.border}`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '15px',
+          borderRadius: '8px',
+          marginTop: '20px'
         }}
       >
-        <p style={{ color: theme.colors.textSecondary }}>
-          Usando el plan: <strong style={{ color: theme.colors.textPrimary }}>{userPlan}</strong>.
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          marginBottom: '10px'
+        }}>
+          <span style={{ 
+            marginRight: '10px',
+            fontSize: '1.2rem',
+            color: theme.colors.textPrimary
+          }}>
+            Plan actual:
+          </span>
+          <span style={{
+            padding: '5px 10px',
+            borderRadius: '20px',
+            backgroundColor: theme.colors.primary + '20',
+            color: theme.colors.primary,
+            fontWeight: 'bold',
+            textTransform: 'uppercase'
+          }}>
+            {userPlan || '...'}
+          </span>
+        </div>
+        
+        <p style={{ 
+          color: theme.colors.textSecondary,
+          textAlign: 'center',
+          marginBottom: '10px'
+        }}>
+          {planDetails.description || 'Cargando detalles del plan...'}
         </p>
-        {userPlan === 'basic' && (
-          <p style={{ color: theme.colors.textSecondary }}>
-            ¿Quieres ver más criptomonedas?{' '}
-            <a 
-              href="/planes" 
-              style={{ 
-                color: theme.colors.primary,
-                fontWeight: 500
-              }}
-            >
-              Actualiza tu plan
-            </a>
-          </p>
+        
+        {userPlan && userPlan.toLowerCase() !== 'premium' && (
+          <a 
+            href="/planes" 
+            style={{ 
+              color: theme.colors.primary,
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '8px 15px',
+              borderRadius: '5px',
+              backgroundColor: theme.colors.primary + '10',
+              transition: 'all 0.3s ease',
+              ':hover': {
+                backgroundColor: theme.colors.primary + '20'
+              }
+            }}
+          >
+            Actualizar plan
+          </a>
         )}
       </div>
     </div>
