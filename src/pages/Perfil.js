@@ -21,9 +21,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  CircularProgress,
-  TextField,
-  InputAdornment
+  CircularProgress
 } from '@mui/material';
 import { 
   Email, 
@@ -55,7 +53,6 @@ const Perfil = () => {
   const [loading, setLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [initialCryptos, setInitialCryptos] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   
   // Detalles de planes mejorados
   const planInfo = {
@@ -65,10 +62,7 @@ const Perfil = () => {
       maxCryptos: 3,
       description: '3 criptomonedas',
       icon: <Star sx={{ color: theme.colors.primary }} />,
-      price: '50€/mes',
-      gradient: theme.isDarkMode 
-        ? 'linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%)' 
-        : 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)'
+      price: '50€/mes'
     },
     pro: { 
       name: 'Pro', 
@@ -76,10 +70,7 @@ const Perfil = () => {
       maxCryptos: 10,
       description: '10 criptomonedas',
       icon: <Rocket sx={{ color: theme.colors.primary }} />,
-      price: '100€/mes',
-      gradient: theme.isDarkMode 
-        ? 'linear-gradient(135deg, #1a237e 0%, #283593 100%)' 
-        : 'linear-gradient(135deg, #bbdefb 0%, #90caf9 100%)'
+      price: '100€/mes'
     },
     premium: { 
       name: 'Premium', 
@@ -87,10 +78,7 @@ const Perfil = () => {
       maxCryptos: 999,
       description: 'Acceso ilimitado',
       icon: <Diamond sx={{ color: theme.colors.primary }} />,
-      price: '250€/mes',
-      gradient: theme.isDarkMode 
-        ? 'linear-gradient(135deg, #4a148c 0%, #7b1fa2 100%)' 
-        : 'linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%)'
+      price: '250€/mes'
     },
   };
 
@@ -202,7 +190,6 @@ const Perfil = () => {
   const handleCloseDialog = () => {
     setUserCryptos(initialCryptos);
     setOpenEditDialog(false);
-    setSearchTerm('');
   };
 
   const handleLogout = () => {
@@ -210,12 +197,6 @@ const Perfil = () => {
     localStorage.removeItem('coindunk_user');
     navigate('/login');
   };
-
-  const filteredCryptos = availableCryptos.filter(crypto => 
-    !userCryptos.some(c => c.id === crypto.id) &&
-    (crypto.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-     crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
 
   return (
     <Box sx={{
@@ -233,16 +214,15 @@ const Perfil = () => {
           overflow: 'hidden',
           backgroundColor: theme.colors.cardBackground,
           boxShadow: theme.isDarkMode 
-            ? '0 8px 32px rgba(0, 0, 0, 0.5)'
+            ? '0 8px 32px rgba(0, 0, 0, 0.3)'
             : '0 8px 32px rgba(0, 0, 0, 0.1)',
           mb: 3,
-          border: `1px solid ${theme.colors.border}`,
-          transition: 'all 0.3s ease'
+          border: `1px solid ${theme.colors.border}`
         }}>
           {/* Header */}
           <Box sx={{
-            p: 2,
-            background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.primaryDark} 100%)`,
+            p: 1.5,
+            backgroundColor: theme.colors.primary,
             color: theme.colors.textOnPrimary,
             position: 'relative',
             textAlign: 'center'
@@ -251,13 +231,9 @@ const Perfil = () => {
               onClick={() => navigate(-1)}
               sx={{
                 position: 'absolute',
-                left: 16,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: theme.colors.textOnPrimary,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }
+                left: 12,
+                top: 12,
+                color: theme.colors.textOnPrimary
               }}
             >
               <ArrowBack />
@@ -268,9 +244,9 @@ const Perfil = () => {
           </Box>
 
           <Box sx={{ p: 3 }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}> {/* Aumentado el spacing para mejor distribución */}
               {/* Columna izquierda - Información del usuario */}
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={5}>
                 <Stack direction="column" alignItems="center" spacing={2} sx={{ mb: 4 }}>
                   <Avatar sx={{ 
                     width: 120, 
@@ -293,19 +269,48 @@ const Perfil = () => {
                     {user.username}
                   </Typography>
                   
-                  <Chip 
-                    icon={planInfo[user.plan]?.icon}
-                    label={`${planInfo[user.plan]?.name} - ${planInfo[user.plan]?.price}`}
-                    color={planInfo[user.plan]?.color}
-                    variant="outlined"
-                    sx={{ 
-                      borderColor: theme.colors.primary,
-                      color: theme.colors.textPrimary,
-                      fontWeight: 500,
-                      px: 1,
-                      py: 1.5
-                    }}
-                  />
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Chip 
+                      icon={planInfo[user.plan]?.icon}
+                      label={`${planInfo[user.plan]?.name} - ${planInfo[user.plan]?.price}`}
+                      color={planInfo[user.plan]?.color}
+                      variant="outlined"
+                      sx={{ 
+                        borderColor: theme.colors.primary,
+                        color: theme.colors.textPrimary,
+                        fontWeight: 500,
+                        px: 1,
+                        py: 1.5
+                      }}
+                    />
+                    {user.plan !== 'premium' && (
+                      <Button
+                        href="/actualizar-plan"
+                        variant="text"
+                        size="small"
+                        sx={{
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                          textDecoration: 'none',
+                          padding: '6px 14px',
+                          borderRadius: '12px',
+                          fontSize: '0.8rem',
+                          backgroundColor: theme.isDarkMode 
+                            ? `${theme.colors.primary}20` 
+                            : `${theme.colors.primary}10`,
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            backgroundColor: theme.isDarkMode 
+                              ? `${theme.colors.primary}30` 
+                              : `${theme.colors.primary}20`,
+                            transform: 'translateY(-1px)'
+                          }
+                        }}
+                      >
+                        Actualizar
+                      </Button>
+                    )}
+                  </Stack>
                   <Typography variant="caption" sx={{ 
                     color: theme.colors.textSecondary,
                     textAlign: 'center'
@@ -320,8 +325,8 @@ const Perfil = () => {
                   borderWidth: 1
                 }} />
 
-                {/* Sección de información */}
-                <Stack spacing={2}>
+                {/* Sección de información personal */}
+                <Stack spacing={2.5}> {/* Aumentado el spacing */}
                   <Paper elevation={0} sx={{ 
                     p: 2, 
                     borderRadius: 2,
@@ -396,237 +401,177 @@ const Perfil = () => {
                 </Stack>
               </Grid>
 
-              {/* Columna derecha - Criptomonedas y configuración */}
-              <Grid item xs={12} md={6}>
-                <Paper elevation={0} sx={{ 
-                  p: 2, 
-                  borderRadius: 2, 
-                  mb: 3,
-                  backgroundColor: theme.colors.paper,
-                  border: `1px solid ${theme.colors.border}`,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    boxShadow: theme.shadow
-                  }
-                }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-                    <Typography variant="h6" sx={{ 
-                      color: theme.colors.textPrimary,
-                      fontWeight: 600
-                    }}>
-                      Tus Criptomonedas
-                    </Typography>
-                    <Button
-                      startIcon={<Edit sx={{ fontSize: '1.1rem' }} />}
-                      onClick={() => setOpenEditDialog(true)}
-                      size="small"
-                      sx={{ 
-                        color: theme.colors.primary,
-                        backgroundColor: 'transparent',
-                        '&:hover': {
-                          backgroundColor: theme.isDarkMode ? 'rgba(255, 167, 38, 0.08)' : 'rgba(230, 126, 34, 0.08)',
-                          transform: 'translateY(-1px)'
-                        },
-                        transition: 'all 0.2s ease',
-                        fontWeight: 500,
-                        textTransform: 'none',
-                        letterSpacing: '0.5px',
-                        borderRadius: 1
-                      }}
-                    >
-                      Editar
-                    </Button>
-                  </Stack>
-
-                  {userCryptos.length > 0 ? (
-                    <Stack direction="row" flexWrap="wrap" gap={1}>
-                      {userCryptos.map((crypto) => (
-                        <Chip
-                          key={crypto.id}
-                          label={crypto.symbol}
-                          sx={{
-                            backgroundColor: theme.colors.primaryLight,
-                            color: theme.colors.textOnPrimary,
-                            fontWeight: 500,
-                            '& .MuiChip-label': {
-                              px: 1
-                            },
-                            '&:hover': {
-                              transform: 'scale(1.05)',
-                              boxShadow: theme.shadow
-                            },
-                            transition: 'all 0.2s ease'
-                          }}
-                        />
-                      ))}
-                    </Stack>
-                  ) : (
-                    <Typography variant="body2" sx={{ 
-                      color: theme.colors.textSecondary,
-                      fontStyle: 'italic'
-                    }}>
-                      No has agregado criptomonedas aún
-                    </Typography>
-                  )}
-
-                  <Typography variant="caption" sx={{ 
-                    display: 'block',
-                    mt: 1.5,
-                    color: theme.colors.textSecondary,
-                    fontSize: '0.75rem'
+              {/* Columna derecha - Configuración */}
+              <Grid item xs={12} md={7}>
+                <Stack spacing={3}> {/* Aumentado el spacing entre elementos */}
+                  {/* Sección de criptomonedas */}
+                  <Paper elevation={0} sx={{ 
+                    p: 2.5, 
+                    borderRadius: 2, 
+                    backgroundColor: theme.colors.paper,
+                    border: `1px solid ${theme.colors.border}`,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      boxShadow: theme.shadow
+                    }
                   }}>
-                    {userCryptos.length}/{planInfo[user.plan]?.maxCryptos} criptomonedas
-                  </Typography>
-                </Paper>
-
-                <Paper elevation={0} sx={{ 
-                  p: 2, 
-                  borderRadius: 2, 
-                  mb: 3,
-                  background: planInfo[user.plan]?.gradient,
-                  border: `1px solid ${theme.colors.border}`,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: theme.shadow
-                  }
-                }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Security sx={{ 
-                        color: theme.colors.primary,
-                        fontSize: '1.8rem'
-                      }} />
-                      <Box>
-                        <Typography variant="caption" sx={{ 
-                          color: theme.colors.textSecondary,
-                          fontSize: '0.75rem',
-                          fontWeight: 500,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px'
-                        }}>
-                          Plan actual
-                        </Typography>
-                        <Typography sx={{ 
-                          color: theme.colors.textPrimary,
-                          fontWeight: 500
-                        }}>
-                          {planInfo[user.plan]?.name}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                    {user.plan !== 'premium' && (
-                      <Button 
-                        variant="contained"
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                      <Typography variant="h6" sx={{ 
+                        color: theme.colors.textPrimary,
+                        fontWeight: 600
+                      }}>
+                        Tus Criptomonedas
+                      </Typography>
+                      <Button
+                        startIcon={<Edit sx={{ fontSize: '1.1rem' }} />}
+                        onClick={() => setOpenEditDialog(true)}
                         size="small"
-                        onClick={() => navigate('/planes')}
-                        sx={{
-                          backgroundColor: theme.colors.primary,
-                          color: theme.colors.textOnPrimary,
+                        sx={{ 
+                          color: theme.colors.primary,
+                          backgroundColor: 'transparent',
                           '&:hover': {
-                            backgroundColor: theme.colors.primaryHover,
+                            backgroundColor: theme.isDarkMode ? 'rgba(255, 167, 38, 0.08)' : 'rgba(230, 126, 34, 0.08)',
                             transform: 'translateY(-1px)'
                           },
                           transition: 'all 0.2s ease',
                           fontWeight: 500,
                           textTransform: 'none',
                           letterSpacing: '0.5px',
-                          borderRadius: 1,
-                          px: 2,
-                          py: 0.8
+                          borderRadius: 1
                         }}
                       >
-                        Actualizar
+                        Editar
                       </Button>
-                    )}
-                  </Stack>
-                </Paper>
-
-                <Paper elevation={0} sx={{ 
-                  p: 2, 
-                  borderRadius: 2, 
-                  mb: 3,
-                  backgroundColor: theme.colors.paper,
-                  border: `1px solid ${theme.colors.border}`,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: theme.shadow
-                  }
-                }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      {theme.isDarkMode ? (
-                        <DarkMode sx={{ 
-                          color: theme.colors.primary,
-                          fontSize: '1.8rem'
-                        }} />
-                      ) : (
-                        <LightMode sx={{ 
-                          color: theme.colors.primary,
-                          fontSize: '1.8rem'
-                        }} />
-                      )}
-                      <Box>
-                        <Typography variant="caption" sx={{ 
-                          color: theme.colors.textSecondary,
-                          fontSize: '0.75rem',
-                          fontWeight: 500,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px'
-                        }}>
-                          Tema de la aplicación
-                        </Typography>
-                        <Typography sx={{ 
-                          color: theme.colors.textPrimary,
-                          fontWeight: 500
-                        }}>
-                          Modo {theme.isDarkMode ? 'oscuro' : 'claro'}
-                        </Typography>
-                      </Box>
                     </Stack>
-                    <Switch
-                      checked={theme.isDarkMode}
-                      onChange={theme.toggleTheme}
-                      color="primary"
-                      sx={{
-                        '& .MuiSwitch-switchBase.Mui-checked': {
-                          color: theme.colors.primary,
-                          '&:hover': {
-                            backgroundColor: 'transparent'
-                          }
-                        },
-                        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                          backgroundColor: theme.colors.primaryLight
-                        }
-                      }}
-                    />
-                  </Stack>
-                </Paper>
 
-                <Button 
-                  fullWidth
-                  variant="contained"
-                  startIcon={<Logout sx={{ fontSize: '1.1rem' }} />}
-                  onClick={handleLogout}
-                  sx={{
-                    backgroundColor: theme.colors.error,
-                    color: theme.colors.textOnPrimary,
-                    '&:hover': {
-                      backgroundColor: theme.isDarkMode ? '#D32F2F' : '#B71C1C',
-                      transform: 'translateY(-1px)'
-                    },
+                    {userCryptos.length > 0 ? (
+                      <Stack direction="row" flexWrap="wrap" gap={1.5}> {/* Aumentado el gap */}
+                        {userCryptos.map((crypto) => (
+                          <Chip
+                            key={crypto.id}
+                            label={crypto.symbol}
+                            sx={{
+                              backgroundColor: theme.colors.primaryLight,
+                              color: theme.colors.textOnPrimary,
+                              fontWeight: 500,
+                              '& .MuiChip-label': {
+                                px: 1.2
+                              },
+                              '&:hover': {
+                                transform: 'scale(1.05)',
+                                boxShadow: theme.shadow
+                              },
+                              transition: 'all 0.2s ease'
+                            }}
+                          />
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Typography variant="body2" sx={{ 
+                        color: theme.colors.textSecondary,
+                        fontStyle: 'italic'
+                      }}>
+                        No has agregado criptomonedas aún
+                      </Typography>
+                    )}
+
+                    <Typography variant="caption" sx={{ 
+                      display: 'block',
+                      mt: 2, // Aumentado el margen superior
+                      color: theme.colors.textSecondary,
+                      fontSize: '0.75rem'
+                    }}>
+                      {userCryptos.length}/{planInfo[user.plan]?.maxCryptos} criptomonedas
+                    </Typography>
+                  </Paper>
+
+                  {/* Configuración de tema */}
+                  <Paper elevation={0} sx={{ 
+                    p: 2.5, 
+                    borderRadius: 2, 
+                    backgroundColor: theme.colors.paper,
+                    border: `1px solid ${theme.colors.border}`,
                     transition: 'all 0.2s ease',
-                    fontWeight: 500,
-                    textTransform: 'none',
-                    letterSpacing: '0.5px',
-                    borderRadius: 1,
-                    py: 1.2,
-                    boxShadow: theme.shadow
-                  }}
-                >
-                  Cerrar Sesión
-                </Button>
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: theme.shadow
+                    }
+                  }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        {theme.isDarkMode ? (
+                          <DarkMode sx={{ 
+                            color: theme.colors.primary,
+                            fontSize: '1.8rem'
+                          }} />
+                        ) : (
+                          <LightMode sx={{ 
+                            color: theme.colors.primary,
+                            fontSize: '1.8rem'
+                          }} />
+                        )}
+                        <Box>
+                          <Typography variant="caption" sx={{ 
+                            color: theme.colors.textSecondary,
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
+                          }}>
+                            Tema de la aplicación
+                          </Typography>
+                          <Typography sx={{ 
+                            color: theme.colors.textPrimary,
+                            fontWeight: 500
+                          }}>
+                            Modo {theme.isDarkMode ? 'oscuro' : 'claro'}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                      <Switch
+                        checked={theme.isDarkMode}
+                        onChange={theme.toggleTheme}
+                        color="primary"
+                        sx={{
+                          '& .MuiSwitch-switchBase.Mui-checked': {
+                            color: theme.colors.primary,
+                            '&:hover': {
+                              backgroundColor: 'transparent'
+                            }
+                          },
+                          '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                            backgroundColor: theme.colors.primaryLight
+                          }
+                        }}
+                      />
+                    </Stack>
+                  </Paper>
+
+                  {/* Botón de cerrar sesión */}
+                  <Button 
+                    fullWidth
+                    variant="contained"
+                    startIcon={<Logout sx={{ fontSize: '1.1rem' }} />}
+                    onClick={handleLogout}
+                    sx={{
+                      backgroundColor: theme.colors.error,
+                      color: theme.colors.textOnPrimary,
+                      '&:hover': {
+                        backgroundColor: theme.isDarkMode ? '#D32F2F' : '#B71C1C',
+                        transform: 'translateY(-1px)'
+                      },
+                      transition: 'all 0.2s ease',
+                      fontWeight: 500,
+                      textTransform: 'none',
+                      letterSpacing: '0.5px',
+                      borderRadius: 1,
+                      py: 1.2,
+                      boxShadow: theme.shadow
+                    }}
+                  >
+                    Cerrar Sesión
+                  </Button>
+                </Stack>
               </Grid>
             </Grid>
           </Box>
@@ -674,8 +619,6 @@ const Perfil = () => {
               Puedes agregar hasta {planInfo[user.plan]?.maxCryptos} criptomonedas ({userCryptos.length}/{planInfo[user.plan]?.maxCryptos} usadas)
             </Typography>
             
-          
-
             <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
               <FormControl fullWidth size="small">
                 <InputLabel sx={{ 
@@ -735,25 +678,26 @@ const Perfil = () => {
                     }
                   }}
                 >
-                  {filteredCryptos.map((crypto) => (
-                    <MenuItem 
-                      key={crypto.id} 
-                      value={crypto.id}
-                    >
-                      <Stack direction="row" alignItems="center" spacing={1.5}>
-                        <Typography variant="caption" sx={{ 
-                          fontWeight: 600,
-                          fontSize: '0.8rem',
-                          color: 'inherit'
-                        }}>
-                          {crypto.symbol}
-                        </Typography>
-                        <Typography sx={{ fontWeight: 500, color: 'inherit' }}>
-                          {crypto.name}
-                        </Typography>
-                      </Stack>
-                    </MenuItem>
-                  ))}
+                  {availableCryptos
+                    .filter(crypto => !userCryptos.some(c => c.id === crypto.id))
+                    .map((crypto) => (
+                      <MenuItem 
+                        key={crypto.id} 
+                        value={crypto.id}
+                      >
+                        <Stack direction="row" alignItems="center" spacing={1.5}>
+                          <Typography variant="caption" sx={{ 
+                            fontWeight: 600,
+                            fontSize: '0.7rem'
+                          }}>
+                            {crypto.symbol}
+                          </Typography>
+                          <Typography sx={{ fontWeight: 500 }}>
+                            {crypto.name}
+                          </Typography>
+                        </Stack>
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
               <Button
@@ -765,8 +709,7 @@ const Perfil = () => {
                   backgroundColor: theme.colors.primary,
                   color: theme.colors.textOnPrimary,
                   '&:hover': {
-                    backgroundColor: theme.colors.primaryHover,
-                    transform: 'translateY(-1px)'
+                    backgroundColor: theme.colors.primaryHover
                   },
                   '&:disabled': {
                     backgroundColor: theme.colors.textDisabled,
@@ -893,12 +836,7 @@ const Perfil = () => {
               backgroundColor: theme.colors.primary,
               color: theme.colors.textOnPrimary,
               '&:hover': {
-                backgroundColor: theme.colors.primaryHover,
-                transform: 'translateY(-1px)'
-              },
-              '&:disabled': {
-                backgroundColor: theme.colors.textDisabled,
-                color: theme.colors.textOnPrimary
+                backgroundColor: theme.colors.primaryHover
               },
               transition: 'all 0.2s ease',
               fontWeight: 500,

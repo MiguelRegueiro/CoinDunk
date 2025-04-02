@@ -532,6 +532,117 @@ app.post('/api/auth/register', async (req, res) => {
 
 
 
+  // Endpoint para actualizar el plan del usuario
+app.put('/api/user/:userId/plan', async (req, res) => {
+  let conn;
+  try {
+    const userId = parseInt(req.params.userId);
+    const { plan } = req.body;
+
+    // Validaciones
+    if (!userId || isNaN(userId)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'ID de usuario no válido' 
+      });
+    }
+
+    if (!plan || !['basic', 'pro', 'premium'].includes(plan)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Plan no válido' 
+      });
+    }
+
+    conn = await pool.getConnection();
+    await conn.beginTransaction();
+
+    try {
+      // 1. Verificar que el usuario existe
+      const [users] = await conn.query(
+        'SELECT user_id FROM users WHERE user_id = ? LIMIT 1',
+        [userId]
+      );
+      
+      if (users.length === 0) {
+        throw new Error('Usuario no encontrado');
+      }
+
+      // 2. Obtener el plan_id del nuevo plan
+      const [plans] = await conn.query(
+        'SELECT plan_id FROM plans WHERE plan_name = ? LIMIT 1',
+        [plan]
+      );
+      
+      if (plans.length === 0) {
+        throw new Error('Plan no encontrado');
+      }
+
+      const planId = plans[0].plan_id;
+
+      // 3. Desactivar el plan actual
+      await conn.query(`
+        UPDATE user_plans 
+        SET is_active = FALSE, 
+            updated_at = CURRENT_TIMESTAMP 
+        WHERE user_id = ? 
+        AND is_active = TRUE
+      `, [userId]);
+
+      // 4. Verificar si el usuario ya tenía este plan anteriormente
+      const [existingPlans] = await conn.query(`
+        SELECT user_plan_id 
+        FROM user_plans 
+        WHERE user_id = ? 
+        AND plan_id = ?
+        LIMIT 1
+      `, [userId, planId]);
+
+      if (existingPlans.length > 0) {
+        // Reactivar el plan existente
+        await conn.query(`
+          UPDATE user_plans 
+          SET is_active = TRUE,
+              updated_at = CURRENT_TIMESTAMP 
+          WHERE user_plan_id = ?
+        `, [existingPlans[0].user_plan_id]);
+      } else {
+        // Crear nueva relación de plan
+        await conn.query(`
+          INSERT INTO user_plans (user_id, plan_id, is_active)
+          VALUES (?, ?, TRUE)
+        `, [userId, planId]);
+      }
+
+      await conn.commit();
+      
+      res.json({ 
+        success: true,
+        message: 'Plan actualizado correctamente',
+        newPlan: plan
+      });
+
+    } catch (error) {
+      await conn.rollback();
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error al actualizar el plan:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message || 'Error interno del servidor',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+
+
+
 
 
 

@@ -442,7 +442,7 @@ const Home = () => {
         </div>
 
         {userPlan && userPlan.toLowerCase() !== 'premium' && (
-          <a href="/planes" style={{ 
+          <a href="/actualizar-plan" style={{ 
             color: theme.colors.primary,
             fontWeight: 'bold',
             textDecoration: 'none',
