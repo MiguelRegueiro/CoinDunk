@@ -17,7 +17,7 @@
 - [Licencia](#-licencia)
 
 ## 🌟 Visión General del Proyecto
-# 🚀 CoinDunk - Tu Brújula en el Mundo Cripto
+### 🚀 CoinDunk - Tu Brújula en el Mundo Cripto
 CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece:
 
 🔹 Predicciones en tiempo real con algoritmos avanzados. Pronósticos precisos en 24h, 1 semana y 1 mes  
