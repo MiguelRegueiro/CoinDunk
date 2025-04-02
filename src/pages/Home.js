@@ -290,7 +290,7 @@ const Home = () => {
         color: theme.colors.textPrimary,
       }}
     >
-      <div className="header">
+      <div className="headerHome">
         <div className="header-content">
           <img 
             src="CoinDunkNB.png" 
@@ -368,15 +368,17 @@ const Home = () => {
         <p style={{ 
           color: theme.colors.textSecondary, 
           marginTop: '10px',
-          opacity: 0.8
+          opacity: 0.8,
+          textAlign: 'center',
         }}>
           Predicciones basadas en el precio actual y volatilidad histórica.
           {isLoading && ' Actualizando...'}
         </p>
       </div>
 
-      <div className="crypto-selector">
-        <h3 style={{ color: theme.colors.primary }}>
+      <div className="crypto-selector"
+      style={{ margin: '0.5rem auto 0.5rem' }}>
+        <h3 style={{ color: theme.colors.textprimary }}>
           Tus criptomonedas ({cryptos.length}/{maxCryptos})
         </h3>
         <div className="crypto-buttons">
@@ -393,70 +395,71 @@ const Home = () => {
         </div>
       </div>
 
-      <div 
-        className="info-container"
-        style={{
-          backgroundColor: theme.colors.paper,
-          border: `1px solid ${theme.colors.border}`,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '15px',
-          borderRadius: '8px',
-          marginTop: '20px'
-        }}
-      >
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          marginBottom: '10px'
-        }}>
+      <div className="info-container" style={{
+        width: 'fit-content',
+        maxWidth: '100%',
+        margin: '1rem auto 0',
+        padding: '0.5rem 1rem',
+        borderRadius: '50px',
+        backgroundColor: theme.colors.surface,
+        border: `1px solid ${theme.colors.border}`,
+        boxShadow: theme.colors.shadow,
+        transition: 'all 0.2s ease',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.75rem'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ 
-            marginRight: '10px',
-            fontSize: '1.2rem',
-            color: theme.colors.textPrimary
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontWeight: 500
           }}>
             Plan actual:
           </span>
           <span style={{
-            padding: '5px 10px',
-            borderRadius: '20px',
-            backgroundColor: theme.colors.primary + '20',
+            padding: '3px 8px',
+            borderRadius: '12px',
+            backgroundColor: `${theme.colors.primary}15`,
             color: theme.colors.primary,
-            fontWeight: 'bold',
-            textTransform: 'uppercase'
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            textTransform: 'capitalize',
+            letterSpacing: '0.3px',
+            border: `1px solid ${theme.colors.primary}30`
           }}>
             {userPlan || '...'}
           </span>
+          
+          <span style={{ 
+            fontSize: '0.85rem',
+            color: theme.colors.textSecondary,
+            opacity: 0.9,
+            marginTop: '1px'
+          }}>
+            {planDetails.description || '...'}
+          </span>
         </div>
-        
-        <p style={{ 
-          color: theme.colors.textSecondary,
-          textAlign: 'center',
-          marginBottom: '10px'
-        }}>
-          {planDetails.description || 'Cargando detalles del plan...'}
-        </p>
-        
+
         {userPlan && userPlan.toLowerCase() !== 'premium' && (
-          <a 
-            href="/planes" 
-            style={{ 
-              color: theme.colors.primary,
-              fontWeight: 'bold',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '8px 15px',
-              borderRadius: '5px',
-              backgroundColor: theme.colors.primary + '10',
-              transition: 'all 0.3s ease',
-              ':hover': {
-                backgroundColor: theme.colors.primary + '20'
-              }
-            }}
-          >
-            Actualizar plan
+          <a href="/actualizar-plan" style={{ 
+            color: theme.colors.primary,
+            fontWeight: 'bold',
+            textDecoration: 'none',
+            padding: '4px 12px',
+            borderRadius: '12px',
+            fontSize: '0.8rem',
+            backgroundColor: theme.isDarkMode 
+              ? `${theme.colors.primary}20` 
+              : `${theme.colors.primary}10`,
+            transition: 'all 0.3s ease',
+            ':hover': {
+              backgroundColor: theme.isDarkMode 
+                ? `${theme.colors.primary}30` 
+                : `${theme.colors.primary}20`
+            }
+          }}>
+            Actualizar
           </a>
         )}
       </div>

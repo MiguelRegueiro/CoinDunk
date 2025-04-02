@@ -12,6 +12,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     document.body.style.backgroundColor = isDarkMode ? '#121212' : '#f5f5f5';
     document.body.style.color = isDarkMode ? '#e0e0e0' : '#333333';
+    document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
   }, [isDarkMode]);
 
   const theme = {

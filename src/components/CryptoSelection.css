@@ -1,0 +1,100 @@
+.crypto-selection-container {
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .selection-card {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .plan-info {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  
+  .selection-status {
+    margin: 1rem 0;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .error-message {
+    margin: 1rem 0;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .crypto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  .crypto-card {
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .crypto-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .crypto-name {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .crypto-symbol {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:disabled {
+    cursor: not-allowed;
+  }
+  
+  .loading-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

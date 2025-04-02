@@ -149,11 +149,11 @@ const Planes = () => {
         </div>
       </div>
 
-      {/* Enlace al login en la parte inferior */}
-      <div className="login-footer" style={{ marginTop: '60px', paddingBottom: '40px' }}>
+      {/* Enlace al login en la parte inferior - VERSIÓN MEJORADA */}
+      <div className="login-footer" style={{ marginTop: '0px', paddingBottom: '30px' }}>
         <p style={{ 
-          marginBottom: '16px', 
-          color: theme.isDarkMode ? theme.colors.textSecondary : '#5a5a5a',
+          marginBottom: '12px', 
+          color: theme.colors.textSecondary,
           fontSize: '0.95rem'
         }}>
           ¿Ya tienes una cuenta?
@@ -162,34 +162,34 @@ const Planes = () => {
           to="/login"
           style={{
             display: 'inline-block',
-            padding: '10px 24px',
-            borderRadius: '20px',
+            padding: '8px 20px',
+            borderRadius: '6px',
             textDecoration: 'none',
             fontSize: '0.9rem',
             fontWeight: '500',
-            transition: 'all 0.3s ease',
-            backgroundColor: theme.isDarkMode ? 'transparent' : '#f8f9fa',
-            color: theme.isDarkMode ? theme.colors.primary : '#2c3e50',
-            border: `1px solid ${theme.isDarkMode ? theme.colors.primary : '#2c3e50'}`,
-            boxShadow: theme.isDarkMode ? 'none' : '0 2px 4px rgba(0,0,0,0.05)',
+            transition: 'all 0.2s ease',
+            backgroundColor: theme.isDarkMode ? 'transparent' : theme.colors.primary,
+            color: theme.isDarkMode ? theme.colors.primary : theme.colors.textOnPrimary,
+            border: theme.isDarkMode ? `1px solid ${theme.colors.primary}` : 'none',
+            boxShadow: theme.isDarkMode ? 'none' : `0 2px 4px ${theme.colors.primary}20`,
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = theme.isDarkMode ? 
-              theme.colors.primary + '10' : 
-              '#e9ecef';
-            e.target.style.transform = 'translateY(-2px)';
-            e.target.style.boxShadow = theme.isDarkMode ? 
-              'none' : 
-              '0 4px 8px rgba(0,0,0,0.1)';
+            e.target.style.backgroundColor = theme.isDarkMode 
+              ? `${theme.colors.primary}10` 
+              : theme.colors.primaryHover;
+            e.target.style.transform = 'translateY(-1px)';
+            e.target.style.boxShadow = theme.isDarkMode 
+              ? 'none' 
+              : `0 4px 8px ${theme.colors.primary}30`;
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = theme.isDarkMode ? 
-              'transparent' : 
-              '#f8f9fa';
+            e.target.style.backgroundColor = theme.isDarkMode 
+              ? 'transparent' 
+              : theme.colors.primary;
             e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = theme.isDarkMode ? 
-              'none' : 
-              '0 2px 4px rgba(0,0,0,0.05)';
+            e.target.style.boxShadow = theme.isDarkMode 
+              ? 'none' 
+              : `0 2px 4px ${theme.colors.primary}20`;
           }}
         >
           Iniciar sesión

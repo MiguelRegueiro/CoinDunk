@@ -152,36 +152,36 @@ function LoginPage() {
                 )}
 
 <TextField
-                    label="Correo Electrónico"
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    fullWidth
-                    margin="normal"
-                    required
-                    disabled={isLoading}
-                    sx={{ 
-                        mb: 2,
-                        '& .MuiInputLabel-root': {
-                            color: theme.colors.textSecondary
-                        },
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: theme.colors.border
-                            },
-                            '&:hover fieldset': {
-                                borderColor: theme.colors.primary
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: theme.colors.primary
-                            },
-                            '& input': {
-                                color: theme.colors.textPrimary // Texto blanco en dark mode
-                            }
-                        }
-                    }}
-                />
+    label="Correo Electrónico"
+    type="email"
+    name="email"
+    value={formData.email}
+    onChange={handleInputChange}
+    fullWidth
+    margin="normal"
+    required
+    disabled={isLoading}
+    sx={{ 
+        mb: 2,
+        '& .MuiInputLabel-root': {
+            color: theme.colors.textSecondary
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: theme.colors.border
+            },
+            '&:hover fieldset': {
+                borderColor: theme.colors.primary
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: theme.colors.primary
+            },
+            '& input': {
+                color: theme.isDarkMode ? theme.colors.textPrimary : '#000000'
+            }
+        }
+    }}
+/>
 
                 <TextField
                     label="Contraseña"
@@ -255,23 +255,45 @@ function LoginPage() {
                         {error}
                     </Alert>
                 )}
-
-                <Box sx={{ mt: 3 }}>
-                    <Link 
-                        component="button"
-                        type="button"
-                        onClick={() => navigate('/planes')}
-                        sx={{ 
-                            color: theme.colors.text,
-                            textDecoration: 'none',
-                            '&:hover': {
-                                textDecoration: 'underline'
-                            }
-                        }}
-                    >
-                        ¿Aún no tienes cuenta? Descubre nuestros planes
-                    </Link>
-                </Box>
+                
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Link
+                component="button"
+                type="button"
+                onClick={() => navigate('/planes')}
+                sx={{
+                color: theme.colors.textSecondary,
+                textDecoration: 'none',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: '4px 8px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                borderRadius: '4px',
+                transition: 'all 0.3s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                '&:hover': {
+                    color: theme.colors.primary,
+                    textDecoration: 'none',
+                    backgroundColor: theme.isDarkMode ? 'rgba(255, 167, 38, 0.08)' : 'rgba(230, 126, 34, 0.08)',
+                    transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                    transform: 'translateY(0)',
+                },
+                '&:focus-visible': {
+                    outline: `2px solid ${theme.colors.primary}`,
+                    outlineOffset: '2px',
+                }
+                }}
+            >
+                ¿No tienes una cuenta? <Box component="span" sx={{ color: theme.colors.primary, fontWeight: 600 }}>Regístrate aquí</Box>
+            </Link>
+            </Box>
             </Box>
         </Box>
     );

@@ -13,15 +13,30 @@ const cryptoVolatility = {
 
 // Precios por defecto para cuando falle la API
 const defaultPrices = {
-  bitcoin: 42000,
-  ethereum: 3000,
-  cardano: 2.5,
-  solana: 150,
-  polkadot: 25,
-  tether: 1,
-  ripple: 0.75,
-  dogecoin: 0.15
+  bitcoin: 85.362,       // BTC
+  ethereum: 1916,        // ETH
+  cardano: 0.85,         // ADA
+  solana: 166,           // SOL
+  polkadot: 7.20,        // DOT
+  tether: 1,             // USDT
+  ripple: 1.00,          // XRP
+  dogecoin: 0.16,        // DOGE
+  binancecoin: 600,      // BNB
+  litecoin: 84,          // LTC
+  chainlink: 18,         // LINK
+  polygon: 0.72,         // MATIC
+  stellar: 0.11,         // XLM
+  uniswap: 11,           // UNI
+  avalanche: 36,         // AVAX
+  cosmos: 8.50,          // ATOM
+  monero: 165,           // XMR
+  algorand: 0.18,        // ALGO
+  vechain: 0.035,        // VET
+  filecoin: 6.20,        // FIL
+  tron: 0.12,            // TRX
+  eos: 0.82              // EOS
 };
+
 
 // Función para obtener el precio actual de una criptomoneda
 const getCurrentCryptoPrice = async (cryptoId) => {

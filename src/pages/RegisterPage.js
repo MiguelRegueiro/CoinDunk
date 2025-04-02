@@ -56,60 +56,66 @@ function RegisterPage() {
         setError('');
         
         try {
-            // Validación básica del formulario
-            if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-                throw new Error('Todos los campos son requeridos');
+          // Validación básica del formulario
+          if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+            throw new Error('Todos los campos son requeridos');
+          }
+      
+          if (formData.password !== formData.confirmPassword) {
+            throw new Error('Las contraseñas no coinciden');
+          }
+      
+          if (formData.password.length < 6) {
+            throw new Error('La contraseña debe tener al menos 6 caracteres');
+          }
+      
+          // Intento de registro
+          const response = await axios.post(
+            'http://localhost:5000/api/auth/register', 
+            {
+              name: formData.name,
+              email: formData.email,
+              password: formData.password,
+              plan: formData.plan
+            },
+            { 
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              timeout: 5000
             }
-
-            if (formData.password !== formData.confirmPassword) {
-                throw new Error('Las contraseñas no coinciden');
-            }
-
-            // Intento de registro
-            const response = await axios.post(
-                'http://localhost:5000/api/auth/register', 
-                {
-                    name: formData.name,
-                    email: formData.email,
-                    password: formData.password,
-                    plan: formData.plan
-                },
-                { 
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    timeout: 5000 // 5 segundos de timeout
-                }
-            );
-
-            if (response.data.success) {
-                // Almacenar datos de autenticación
-                localStorage.setItem('coindunk_token', response.data.token);
-                localStorage.setItem('coindunk_user', JSON.stringify(response.data.user));
-                
-                // Redirigir al dashboard
-                navigate('/predicciones');
-            } else {
-                throw new Error(response.data.message || 'Error en el registro');
-            }
+          );
+      
+          if (response.data.success) {
+            // Almacenar datos de autenticación
+            localStorage.setItem('coindunk_token', response.data.token);
+            localStorage.setItem('coindunk_user', JSON.stringify(response.data.user));
+            
+            // Redirigir al dashboard
+            navigate('/seleccion-criptos');
+          } else {
+            throw new Error(response.data.message || 'Error en el registro');
+          }
         } catch (err) {
-            console.error('Register error:', err);
-            
-            let errorMessage = 'Error durante el registro';
-            if (err.response) {
-                if (err.response.data?.message) {
-                    errorMessage = err.response.data.message;
-                }
-            } else if (err.message) {
-                errorMessage = err.message;
+          console.error('Register error:', err);
+          
+          let errorMessage = 'Error durante el registro';
+          if (err.response) {
+            if (err.response.data?.message) {
+              errorMessage = err.response.data.message;
+            } else if (err.response.status === 409) {
+              errorMessage = 'El email ya está registrado';
             }
-            
-            setError(errorMessage);
+          } else if (err.message) {
+            errorMessage = err.message;
+          }
+          
+          setError(errorMessage);
         } finally {
-            setIsLoading(false);
+          setIsLoading(false);
         }
-    };
+      };
 
     if (!theme) {
         return (
@@ -392,23 +398,44 @@ function RegisterPage() {
                     </Alert>
                 )}
 
-                <Box sx={{ mt: 3 }}>
-                    <Link 
-                        component="button"
-                        type="button"
-                        onClick={() => navigate('/login')}
-                        sx={{ 
-                            color: theme.colors.textSecondary,
-                            textDecoration: 'none',
-                            '&:hover': {
-                                color: theme.colors.primary,
-                                textDecoration: 'underline'
-                            }
-                        }}
-                    >
-                        ¿Ya tienes cuenta? Inicia sesión
-                    </Link>
-                </Box>
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Link
+                component="button"
+                type="button"
+                onClick={() => navigate('/login')}
+                sx={{
+                color: theme.colors.textSecondary,
+                textDecoration: 'none',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: '4px 8px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                borderRadius: '4px',
+                transition: 'all 0.3s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                '&:hover': {
+                    color: theme.colors.primary,
+                    textDecoration: 'none',
+                    backgroundColor: theme.isDarkMode ? 'rgba(255, 167, 38, 0.08)' : 'rgba(230, 126, 34, 0.08)',
+                    transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                    transform: 'translateY(0)',
+                },
+                '&:focus-visible': {
+                    outline: `2px solid ${theme.colors.primary}`,
+                    outlineOffset: '2px',
+                }
+                }}
+            >
+                ¿Ya tienes cuenta? <Box component="span" sx={{ color: theme.colors.primary, fontWeight: 600 }}>Inicia sesión</Box>
+            </Link>
+            </Box>
             </Box>
         </Box>
     );
