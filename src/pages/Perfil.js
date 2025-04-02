@@ -90,12 +90,12 @@ const Perfil = () => {
         }}>
           {/* Header con estilo elegante */}
           <Box sx={{
-            p: 3,
+            p: 1.8,
             backgroundColor: theme.colors.primary,
             color: theme.colors.textOnPrimary,
             position: 'relative',
             textAlign: 'center',
-            boxShadow: `0 4px 20px ${theme.colors.primary}30`
+            boxShadow: `0 4px 20px ${theme.colors.primary}30`,
           }}>
             <IconButton
               onClick={() => navigate(-1)}
