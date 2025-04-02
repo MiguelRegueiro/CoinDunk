@@ -1,124 +1,142 @@
 // src/components/predictions.js
-// Datos de volatilidad histórica de criptomonedas (porcentaje)
-const cryptoVolatility = {
-  bitcoin: 2.5,    // 2.5% de volatilidad diaria promedio
-  ethereum: 3.2,
-  cardano: 4.1,
-  solana: 5.3,
-  polkadot: 3.8,
-  tether: 0.1,
-  ripple: 3.5,
-  dogecoin: 6.2
-};
+import axios from 'axios';
 
-// Precios por defecto para cuando falle la API
+const API_URL = 'https://api.coingecko.com/api/v3';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos de caché
+
 const defaultPrices = {
-  bitcoin: 85.362,       // BTC
-  ethereum: 1916,        // ETH
-  cardano: 0.85,         // ADA
-  solana: 166,           // SOL
-  polkadot: 7.20,        // DOT
-  tether: 1,             // USDT
-  ripple: 1.00,          // XRP
-  dogecoin: 0.16,        // DOGE
-  binancecoin: 600,      // BNB
-  litecoin: 84,          // LTC
-  chainlink: 18,         // LINK
-  polygon: 0.72,         // MATIC
-  stellar: 0.11,         // XLM
-  uniswap: 11,           // UNI
-  avalanche: 36,         // AVAX
-  cosmos: 8.50,          // ATOM
-  monero: 165,           // XMR
-  algorand: 0.18,        // ALGO
-  vechain: 0.035,        // VET
-  filecoin: 6.20,        // FIL
-  tron: 0.12,            // TRX
-  eos: 0.82              // EOS
+  bitcoin: 85362,
+  ethereum: 1916,
+  // ... (mantén el resto de tus precios por defecto)
 };
 
+const priceCache = {};
+const historicalCache = {};
 
-// Función para obtener el precio actual de una criptomoneda
-const getCurrentCryptoPrice = async (cryptoId) => {
+const getHistoricalData = async (cryptoId, days = 30) => {
+  const cacheKey = `${cryptoId}-${days}`;
+  
+  if (historicalCache[cacheKey] && 
+      Date.now() - historicalCache[cacheKey].timestamp < CACHE_DURATION) {
+    return historicalCache[cacheKey].data;
+  }
+
   try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoId}&vs_currencies=usd&precision=8`
+    const response = await axios.get(
+      `${API_URL}/coins/${cryptoId}/market_chart?vs_currency=usd&days=${days}`
     );
     
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
+    const historicalData = response.data.prices.map(item => ({
+      date: new Date(item[0]),
+      price: item[1]
+    }));
     
-    const data = await response.json();
-    return data[cryptoId]?.usd || defaultPrices[cryptoId] || 10000;
+    historicalCache[cacheKey] = {
+      data: historicalData,
+      timestamp: Date.now()
+    };
+    
+    return historicalData;
   } catch (error) {
-    console.error("Error obteniendo precio, usando valor por defecto:", error);
-    return defaultPrices[cryptoId] || 10000;
+    console.error("Error obteniendo datos históricos:", error);
+    throw error;
   }
 };
 
-// Función para generar datos de predicción realistas
-const generateRealisticPredictions = (currentPrice, volatility, periods) => {
-  const predictions = [];
-  let lastPrice = currentPrice;
-  const volatilityFactor = volatility / 100;
+const calculateVolatility = (prices) => {
+  if (prices.length < 2) return 2.0;
   
-  // Asegurarse que el precio inicial esté incluido
-  predictions.push({
-    date: new Date().toISOString(),
-    price: parseFloat(currentPrice.toFixed(4))
-  });
+  const returns = [];
+  for (let i = 1; i < prices.length; i++) {
+    const dailyReturn = (prices[i].price - prices[i-1].price) / prices[i-1].price;
+    returns.push(dailyReturn);
+  }
+  
+  const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+  const variance = returns.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / returns.length;
+  const stdDev = Math.sqrt(variance);
+  
+  return stdDev * Math.sqrt(365) * 100;
+};
 
-  for (let i = 1; i <= periods; i++) {
-    // Variación basada en volatilidad histórica con tendencia más realista
-    const randomChange = (Math.random() * 2 - 1) * volatilityFactor;
+const generateSimplePredictions = (historicalData, steps, hours) => {
+  const currentPrice = historicalData[historicalData.length - 1].price;
+  const volatility = calculateVolatility(historicalData) / 100;
+  
+  const result = [{ 
+    date: new Date().toISOString(), 
+    price: currentPrice, 
+    confidence: 1.0 
+  }];
+  
+  for (let i = 1; i <= steps; i++) {
+    // Modelo simple basado en tendencia reciente y volatilidad
+    const recentTrend = historicalData.length > 5 ? 
+      (historicalData.slice(-5).reduce((sum, item) => sum + item.price, 0) / 5 - 
+       historicalData.slice(-10, -5).reduce((sum, item) => sum + item.price, 0) / 5) / currentPrice : 0;
     
-    // Suavizar cambios bruscos
-    const smoothedChange = randomChange * (0.5 + Math.random() * 0.5);
-    const priceChange = lastPrice * smoothedChange;
+    const randomFactor = (Math.random() * 2 - 1) * volatility;
+    const predictedChange = recentTrend * 0.7 + randomFactor * 0.3;
     
-    const newPrice = lastPrice + priceChange;
-    const date = new Date();
-    date.setHours(date.getHours() + i);
-    
-    predictions.push({
-      date: date.toISOString(),
-      price: parseFloat(newPrice.toFixed(4))
+    result.push({
+      date: new Date(Date.now() + i * hours * 60 * 60 * 1000).toISOString(),
+      price: currentPrice * (1 + predictedChange),
+      confidence: Math.max(0.5, 1 - Math.abs(predictedChange) * 2)
     });
-    
-    lastPrice = newPrice;
   }
   
-  return predictions;
+  return result;
 };
 
-// Función principal que exportamos
 export const generatePredictions = async (cryptoName) => {
   const cryptoId = cryptoName.toLowerCase();
-  const volatility = cryptoVolatility[cryptoId] || 3.0;
-
+  
   try {
-    const currentPrice = await getCurrentCryptoPrice(cryptoId);
-    console.log(`Precio actual de ${cryptoName}: $${currentPrice}`);
-    
-    // Generar predicciones con periodos más realistas
-    const predictions = {
-      "1H": generateRealisticPredictions(currentPrice, volatility, 4).slice(0, 4), // 4 puntos en 1 hora
-      "1D": generateRealisticPredictions(currentPrice, volatility, 24),   // 24 puntos (1 por hora)
-      "1W": generateRealisticPredictions(currentPrice, volatility, 7),    // 7 puntos (1 por día)
-      "1M": generateRealisticPredictions(currentPrice, volatility, 30)    // 30 puntos (1 por día)
-    };
+    const historicalData = await getHistoricalData(cryptoId, 30);
+    const volatility = calculateVolatility(historicalData);
+    const currentPrice = historicalData[historicalData.length - 1].price;
     
     return {
       crypto: cryptoName,
       currentPrice,
       lastUpdated: new Date().toISOString(),
-      predictions,
-      volatility: `${volatility}%`
+      predictions: {
+        "1H": generateSimplePredictions(historicalData, 4, 0.25),
+        "1D": generateSimplePredictions(historicalData, 24, 1),
+        "1W": generateSimplePredictions(historicalData, 7, 24),
+        "1M": generateSimplePredictions(historicalData, 30, 24)
+      },
+      volatility: `${volatility.toFixed(2)}%`,
+      modelInfo: {
+        "1H": "Trend + Volatility Model",
+        "1D": "Trend + Volatility Model",
+        "1W": "Trend + Volatility Model",
+        "1M": "Trend + Volatility Model"
+      }
     };
     
   } catch (error) {
     console.error("Error generando predicciones:", error);
-    throw new Error("No se pudieron generar las predicciones");
+    const currentPrice = defaultPrices[cryptoId] || 10000;
+    const volatility = 3.0;
+    
+    return {
+      crypto: cryptoName,
+      currentPrice,
+      lastUpdated: new Date().toISOString(),
+      predictions: {
+        "1H": [{ date: new Date().toISOString(), price: currentPrice, confidence: 1.0 }],
+        "1D": [{ date: new Date().toISOString(), price: currentPrice, confidence: 1.0 }],
+        "1W": [{ date: new Date().toISOString(), price: currentPrice, confidence: 1.0 }],
+        "1M": [{ date: new Date().toISOString(), price: currentPrice, confidence: 1.0 }]
+      },
+      volatility: `${volatility}%`,
+      modelInfo: {
+        "1H": "Fallback (no data)",
+        "1D": "Fallback (no data)",
+        "1W": "Fallback (no data)",
+        "1M": "Fallback (no data)"
+      }
+    };
   }
 };

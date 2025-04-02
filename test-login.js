@@ -1,109 +1,173 @@
 const axios = require('axios');
 const chalk = require('chalk');
 
-// Configuración
-const API_URL = 'http://localhost:5000/api/auth/login';
-const TEST_CASES = [
+// Configuración mejorada
+const BASE_URL = 'http://localhost:5000/api';
+const TEST_USERS = [
   {
     email: 'user@coindunk.com',
-    password: 'user123',
-    description: 'Usuario 1 con credenciales correctas',
-    shouldPass: true
+    password: 'user',
+    description: 'Usuario básico con credenciales correctas',
+    expectedPlan: 'basic'
   },
   {
     email: 'user2@coindunk.com',
-    password: 'user456',
-    description: 'Usuario 2 con credenciales correctas',
-    shouldPass: true
+    password: 'user2',
+    description: 'Usuario pro con credenciales correctas',
+    expectedPlan: 'pro'
   },
   {
-    email: 'user@coindunk.com',
-    password: 'wrongpass',
-    description: 'Usuario 1 con contraseña incorrecta',
-    shouldPass: false
-  },
-  {
-    email: 'noexiste@test.com',
-    password: 'anypass',
-    description: 'Usuario inexistente',
-    shouldPass: false
+    email: 'user3@coindunk.com',
+    password: 'user3',
+    description: 'Usuario premium con credenciales correctas',
+    expectedPlan: 'premium'
   }
 ];
 
-// Función para mostrar resultados
-function logResult(test, success, response) {
-  const status = success ? chalk.green('✓') : chalk.red('✗');
+// Colores para mejor visualización
+const colors = {
+  success: chalk.green.bold,
+  error: chalk.red.bold,
+  info: chalk.blue.bold,
+  warning: chalk.yellow.bold
+};
+
+// Función mejorada para mostrar resultados
+function logTestResult(test, result, response = null) {
+  const status = result.passed ? colors.success('✓') : colors.error('✗');
   console.log(`${status} ${test.description}`);
   
   if (response) {
-    console.log(`   ${chalk.blue('Respuesta:')}`, {
+    console.log(colors.info('   Respuesta:'), {
       status: response.status,
-      data: response.data
+      data: response.data || 'Sin datos'
     });
   }
-}
-
-// Función para ejecutar pruebas
-async function runTests() {
-  console.log(chalk.bold('\n🔍 Iniciando pruebas de autenticación...\n'));
   
-  let passed = 0;
-  
-  for (const test of TEST_CASES) {
-    try {
-      const response = await axios.post(API_URL, {
-        email: test.email,
-        password: test.password
-      });
-      
-      if (test.shouldPass) {
-        logResult(test, true, response);
-        passed++;
-      } else {
-        logResult(test, false, response);
-      }
-    } catch (error) {
-      if (!test.shouldPass) {
-        logResult(test, true, error.response);
-        passed++;
-      } else {
-        logResult(test, false, error.response);
-        console.error(chalk.red('   Error:'), error.message);
-      }
-    }
-    console.log(chalk.gray('----------------------------------------'));
+  if (result.message) {
+    console.log(colors.warning('   Detalles:'), result.message);
   }
-  
-  // Resumen final
-  console.log(chalk.bold(`\n📊 Resultados:`));
-  console.log(`   ${chalk.green(`Pasadas: ${passed}`)}`);
-  console.log(`   ${chalk.red(`Falladas: ${TEST_CASES.length - passed}`)}`);
-  console.log(`   ${chalk.blue(`Total: ${TEST_CASES.length}`)}`);
-  
-  process.exit(passed === TEST_CASES.length ? 0 : 1);
 }
 
-// Verificar conexión antes de ejecutar pruebas
-async function checkServer() {
+// Función para verificar el servidor
+async function checkServerHealth() {
   try {
-    await axios.get('http://localhost:5000/api/health');
-    return true;
+    const response = await axios.get(`${BASE_URL}/health`);
+    if (response.data.status === 'OK') {
+      console.log(colors.success('✅ Servidor funcionando correctamente'));
+      return true;
+    }
+    throw new Error('Servidor no está listo');
   } catch (error) {
-    console.error(chalk.red('\n⚠️  El servidor no está respondiendo:'));
-    console.error('   Asegúrate de que el servidor esté corriendo en el puerto 5000');
-    console.error('   Ejecuta:', chalk.cyan('node server.js'));
+    console.log(colors.error('\n⚠️  Problema de conexión con el servidor:'));
+    console.log(colors.info('   Asegúrate de que:'));
+    console.log('   1. El servidor esté ejecutándose (node server.js)');
+    console.log('   2. MySQL esté corriendo y la base de datos esté configurada');
+    console.log('   3. El puerto 5000 esté disponible');
     return false;
   }
 }
 
-// Ejecución principal
+// Pruebas de autenticación mejoradas
+async function runAuthTests() {
+  console.log(colors.info('\n🔐 Ejecutando pruebas de autenticación...'));
+  
+  let passedTests = 0;
+  const totalTests = TEST_USERS.length + 2; // Usuarios válidos + 2 casos inválidos
+
+  // 1. Pruebas con usuarios existentes
+  for (const user of TEST_USERS) {
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/login`, {
+        email: user.email,
+        password: user.password
+      });
+      
+      const passed = response.status === 200 && 
+                    response.data.user && 
+                    response.data.user.plan === user.expectedPlan;
+      
+      logTestResult(user, {
+        passed,
+        message: passed ? '' : `Plan esperado: ${user.expectedPlan}`
+      });
+      
+      if (passed) passedTests++;
+    } catch (error) {
+      logTestResult(user, {
+        passed: false,
+        message: `Error: ${error.message}`
+      });
+    }
+  }
+
+  // 2. Prueba con credenciales incorrectas
+  const wrongPassTest = {
+    description: 'Autenticación con contraseña incorrecta',
+    shouldPass: false
+  };
+  
+  try {
+    await axios.post(`${BASE_URL}/auth/login`, {
+      email: 'user@coindunk.com',
+      password: 'contraseña_incorrecta'
+    });
+    logTestResult(wrongPassTest, { passed: false });
+  } catch (error) {
+    const passed = error.response.status === 401;
+    logTestResult(wrongPassTest, {
+      passed,
+      message: passed ? 'Correctamente rechazado' : 'Código de estado inesperado'
+    });
+    if (passed) passedTests++;
+  }
+
+  // 3. Prueba con usuario inexistente
+  const nonExistentTest = {
+    description: 'Autenticación con usuario inexistente',
+    shouldPass: false
+  };
+  
+  try {
+    await axios.post(`${BASE_URL}/auth/login`, {
+      email: 'noexiste@coindunk.com',
+      password: 'cualquiercontraseña'
+    });
+    logTestResult(nonExistentTest, { passed: false });
+  } catch (error) {
+    const passed = error.response.status === 401 || error.response.status === 404;
+    logTestResult(nonExistentTest, {
+      passed,
+      message: passed ? 'Correctamente rechazado' : 'Código de estado inesperado'
+    });
+    if (passed) passedTests++;
+  }
+
+  // Resumen final
+  console.log(colors.info('\n📊 Resultados de autenticación:'));
+  console.log(`   ${colors.success(`Pasadas: ${passedTests}`)}`);
+  console.log(`   ${colors.error(`Falladas: ${totalTests - passedTests}`)}`);
+  console.log(`   ${colors.info(`Total: ${totalTests}`)}`);
+  
+  return passedTests === totalTests;
+}
+
+// Ejecución principal mejorada
 async function main() {
-  const serverReady = await checkServer();
-  if (serverReady) {
-    await runTests();
-  } else {
+  console.log(chalk.bold('\n🚀 Iniciando pruebas de CoinDunk'));
+  console.log(chalk.gray('----------------------------------------'));
+  
+  if (!await checkServerHealth()) {
     process.exit(1);
   }
+
+  const authSuccess = await runAuthTests();
+  
+  console.log(chalk.gray('----------------------------------------'));
+  console.log(chalk.bold('\n🏁 Pruebas completadas'));
+  console.log(`Estado final: ${authSuccess ? colors.success('ÉXITO') : colors.error('FALLIDO')}`);
+  
+  process.exit(authSuccess ? 0 : 1);
 }
 
 main();
