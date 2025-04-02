@@ -6,13 +6,13 @@ const API_URL = 'http://localhost:5000/api/auth/login';
 const TEST_CASES = [
   {
     email: 'user@coindunk.com',
-    password: 'user123',
+    password: 'user',
     description: 'Usuario 1 con credenciales correctas',
     shouldPass: true
   },
   {
     email: 'user2@coindunk.com',
-    password: 'user456',
+    password: 'user2',
     description: 'Usuario 2 con credenciales correctas',
     shouldPass: true
   },
