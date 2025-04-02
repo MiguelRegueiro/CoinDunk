@@ -1,5 +1,6 @@
+/* src/pages/Home.css */
 .home-container {
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.25rem;
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -8,28 +9,28 @@
   align-items: center;
 }
 
-.header {
+.headerHome {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
-  margin-top: 40px;
+  margin: 2.7rem 0;
 }
 
 .header-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
+  margin-bottom: -20px;
 }
 
 .logohome {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .app-name {
-  font-size: 32px;
+  font-size: 1.75rem;
   font-weight: 700;
   margin: 0;
   transition: color 0.3s ease;
@@ -38,10 +39,10 @@
 /* ===== CHART CONTAINER ===== */
 .chart-container {
   width: 100%;
-  max-width: 1200px;
-  padding: 2rem;
-  border-radius: 1.25rem;
-  margin-bottom: 2.5rem;
+  max-width: 1000px;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 0.1rem;
   box-shadow: var(--shadow-elevation);
   backdrop-filter: blur(10px);
   background-color: var(--card-background);
@@ -50,9 +51,9 @@
 }
 
 .chart-container h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,15 +62,15 @@
 }
 
 .chart-container h2 span {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   opacity: 0.9;
 }
 
 .chart-wrapper {
-  height: 400px;
+  height: 350px;
   position: relative;
-  margin: 1.5rem 0;
+  margin: 1.25rem 0;
   border-radius: 0.75rem;
   overflow: hidden;
 }
@@ -78,18 +79,18 @@
 .time-range-selector {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
 }
 
 .time-range-button {
-  padding: 0.625rem 1.25rem;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.25px;
   background-color: var(--button-bg);
   color: var(--button-text);
@@ -115,20 +116,20 @@
 /* ===== CRYPTO SELECTOR ===== */
 .crypto-selector {
   width: 100%;
-  max-width: 1200px;
-  margin: 2.5rem auto;
-  text-align: center; /* Añade esta línea */
+  max-width: 1000px;
+  margin: 2rem auto;
+  text-align: center;
 }
 
 .crypto-selector h3 {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1.25rem;
-  /* Elimina cualquier propiedad text-align o margin que pueda estar causando el desalineamiento */
-  display: inline-block; /* Esto ayuda con el pseudo-elemento ::after */
+  margin-bottom: 1rem;
+  display: inline-block;
   position: relative;
-  padding-bottom: 0.5rem;
-  width: 100%; /* Asegura que ocupe todo el ancho */
+  padding-bottom: 0.1rem;
+  width: 100%;
+  margin-bottom: -25px;
 }
 
 .crypto-selector h3::after {
@@ -137,7 +138,7 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
+  width: 50px;
   height: 3px;
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
   border-radius: 3px;
@@ -146,74 +147,60 @@
 .crypto-buttons {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
-/* ===== INFO CONTAINER ===== */
+/* ===== INFO CONTAINER (Compacto en fila) ===== */
 .info-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 2.5rem auto 0;
-  padding: 1.75rem;
-  border-radius: 1rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1rem auto 0;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
   background-color: var(--paper-color);
   border: 1px solid var(--border-color);
-  text-align: center;
   box-shadow: var(--shadow-subtle);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .info-container:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
 
 .info-container > div {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  margin: 0;
 }
 
 .info-container span {
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  font-size: 0.8125rem;
   background-color: var(--primary-light);
   color: var(--text-on-primary);
 }
 
 .info-container p {
-  margin-bottom: 1.25rem;
-  line-height: 1.6;
+  margin: 0;
+  font-size: 0.8125rem;
   opacity: 0.9;
+  white-space: nowrap;
 }
 
 .info-container a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: var(--primary-color);
-  color: var(--text-on-primary);
-  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
 }
-
-.info-container a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(230, 126, 34, 0.4);
-}
-
 /* ===== LOADING STATES ===== */
 .loading-indicator {
   display: flex;
@@ -225,10 +212,10 @@
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid var(--spinner-track);
-  border-top: 4px solid var(--primary-color);
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--spinner-track);
+  border-top: 3px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   position: relative;
@@ -237,11 +224,11 @@
 .spinner::after {
   content: '';
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border: 4px solid transparent;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border: 3px solid transparent;
   border-radius: 50%;
   border-top-color: var(--secondary-color);
   animation: spin 1.5s linear infinite;
@@ -254,11 +241,11 @@
 
 /* ===== THEME VARIABLES ===== */
 :root {
-  --shadow-elevation: 0 12px 28px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04);
-  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.1);
-  --button-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  --button-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.1);
+  --button-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --button-hover-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   --card-background: rgba(255, 255, 255, 0.9);
   --border-color: rgba(0, 0, 0, 0.08);
   --paper-color: #f8f9fa;
@@ -268,11 +255,11 @@
 }
 
 [data-theme="dark"] {
-  --shadow-elevation: 0 12px 28px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.24);
-  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.35);
-  --button-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  --button-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.24);
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.35);
+  --button-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  --button-hover-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
   --card-background: rgba(30, 30, 30, 0.9);
   --border-color: rgba(255, 255, 255, 0.08);
   --paper-color: #2d2d2d;
@@ -284,28 +271,27 @@
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
   .chart-wrapper {
-    height: 350px;
+    height: 300px;
   }
 }
 
 @media (max-width: 768px) {
   .home-container {
-    padding: 2rem 1.25rem;
+    padding: 1.75rem 1rem;
   }
   
   .header-content {
     flex-direction: column;
     text-align: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   
   .app-name {
-    font-size: 1.875rem;
+    font-size: 1.5rem;
   }
   
   .chart-container {
-    padding: 1.5rem;
-    border-radius: 1rem;
+    padding: 1.25rem;
   }
 
   .time-range-selector {
@@ -313,51 +299,52 @@
   }
 
   .time-range-button {
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
   }
   
   .crypto-buttons {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   
   .info-container {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
   .home-container {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 0.75rem;
   }
   
   .logohome {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
   }
   
   .app-name {
-    font-size: 1.625rem;
+    font-size: 1.375rem;
   }
   
   .chart-container {
-    padding: 1.25rem;
-    border-radius: 0.875rem;
+    padding: 1rem;
   }
   
   .chart-wrapper {
-    height: 300px;
+    height: 250px;
   }
   
   .time-range-button {
-    font-size: 0.8125rem;
-    padding: 0.5rem 0.875rem;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.7rem;
   }
   
   .crypto-selector h3 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
   
   .info-container {
-    padding: 1.25rem;
+    padding: 1rem;
+    max-width: 100%;
   }
 }

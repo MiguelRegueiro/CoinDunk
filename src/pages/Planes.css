@@ -1,7 +1,7 @@
 /* src/pages/Planes.css */
 .planes-container {
   text-align: center;
-  padding: 40px 20px;
+  padding: 40px 0px;
   min-height: 100vh;
   font-family: 'Arial', sans-serif;
   background-color: inherit; /* Hereda el color de fondo del body */
@@ -12,8 +12,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px; /* Espacio entre el logo y el texto */
-  margin-bottom: 40px;
+  gap: 10px; /* Espacio entre el logo y el texto */
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 /* Clase específica para el logo en Planes */
@@ -42,7 +43,9 @@
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 10px;
+  margin-top: -45px;
+  margin-bottom: -5px;
 }
 
 .plan-card {
@@ -92,7 +95,7 @@
 .plan-card ul {
   list-style-type: none;
   padding: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .plan-card ul li {
