@@ -9,6 +9,7 @@ import About from './pages/About';
 import LoginPage from './pages/LoginPage';
 import Perfil from './pages/Perfil';
 import RegisterPage from './pages/RegisterPage'; // Importa el componente RegisterPage
+import CryptoSelection from './components/CryptoSelection';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/register" element={<RegisterPage />} /> {/* Nueva ruta para el registro */}
+          <Route path="/seleccion-criptos" element={<CryptoSelection />} />
         </Routes>
       </ThemeProvider>
     </Router>
