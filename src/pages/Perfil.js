@@ -88,9 +88,9 @@ const Perfil = () => {
           border: `1px solid ${theme.colors.border}`,
           backdropFilter: 'blur(8px)'
         }}>
-          {/* Header con estilo elegante */}
+          {/* Header con altura reducida */}
           <Box sx={{
-            p: 1.8,
+            p: 1.5, // Padding reducido
             backgroundColor: theme.colors.primary,
             color: theme.colors.textOnPrimary,
             position: 'relative',
@@ -101,25 +101,26 @@ const Perfil = () => {
               onClick={() => navigate(-1)}
               sx={{
                 position: 'absolute',
-                left: 16,
-                top: 16,
+                left: 12, // Ajuste posición
+                top: 12, // Ajuste posición
                 color: theme.colors.textOnPrimary,
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.25)'
                 },
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                size: 'small' // Icono más pequeño
               }}
               aria-label="Volver"
             >
-              <ArrowBack />
+              <ArrowBack fontSize="small" />
             </IconButton>
             
             <Typography variant="h5" sx={{
               fontWeight: 700,
-              mt: 1,
+              mt: 0, // Margen superior eliminado
               letterSpacing: 0.5,
-              fontSize: '1.5rem'
+              fontSize: '1.3rem' // Tamaño de fuente reducido
             }}>
               Mi Cuenta CoinDunk
             </Typography>
@@ -292,28 +293,31 @@ const Perfil = () => {
                       </Typography>
                     </Box>
                   </Stack>
-                  <Button 
-                    variant="contained"
-                    size="small"
-                    onClick={() => navigate('/planes')}
-                    sx={{ 
-                      backgroundColor: theme.colors.primary,
-                      color: theme.colors.textOnPrimary,
-                      '&:hover': {
-                        backgroundColor: theme.colors.primaryDark,
-                        transform: 'translateY(-2px)'
-                      },
-                      transition: 'all 0.2s ease',
-                      fontWeight: 500,
-                      textTransform: 'none',
-                      borderRadius: 2,
-                      px: 2,
-                      py: 1,
-                      boxShadow: 'none'
-                    }}
-                  >
-                    Actualizar
-                  </Button>
+                  {/* Botón condicional solo para basic y pro */}
+                  {user.plan !== 'premium' && (
+                    <Button 
+                      variant="contained"
+                      size="small"
+                      onClick={() => navigate('/planes')}
+                      sx={{ 
+                        backgroundColor: theme.colors.primary,
+                        color: theme.colors.textOnPrimary,
+                        '&:hover': {
+                          backgroundColor: theme.colors.primaryDark,
+                          transform: 'translateY(-2px)'
+                        },
+                        transition: 'all 0.2s ease',
+                        fontWeight: 500,
+                        textTransform: 'none',
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1,
+                        boxShadow: 'none'
+                      }}
+                    >
+                      Actualizar
+                    </Button>
+                  )}
                 </Stack>
               </Paper>
             </Stack>
@@ -379,7 +383,7 @@ const Perfil = () => {
               </Stack>
             </Paper>
 
-            {/* Botón de cerrar sesión - Estilo refinado */}
+            {/* Botón de cerrar sesión */}
             <Button 
               fullWidth
               variant="contained"
