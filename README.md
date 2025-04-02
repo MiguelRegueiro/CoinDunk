@@ -1,6 +1,6 @@
 # CoinDunk - Plataforma de Predicción de Criptomonedas
 
-![Logo de CoinDunk](./public/CoinDunkNB.png)
+<img src="./public/CoinDunkNB.png" style="width:150px; height:auto;" alt="Logo de CoinDunk">
 
 ## 📌 Tabla de Contenidos
 - [Visión General del Proyecto](#-visión-general-del-proyecto)
