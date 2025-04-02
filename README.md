@@ -12,7 +12,6 @@
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Documentación de la API](#-documentación-de-la-api)
 - [Pruebas](#-pruebas)
-- [Despliegue](#-despliegue)
 - [Contribuciones](#-contribuciones)
 - [Licencia](#-licencia)
 
