@@ -392,23 +392,44 @@ function RegisterPage() {
                     </Alert>
                 )}
 
-                <Box sx={{ mt: 3 }}>
-                    <Link 
-                        component="button"
-                        type="button"
-                        onClick={() => navigate('/login')}
-                        sx={{ 
-                            color: theme.colors.textSecondary,
-                            textDecoration: 'none',
-                            '&:hover': {
-                                color: theme.colors.primary,
-                                textDecoration: 'underline'
-                            }
-                        }}
-                    >
-                        ¿Ya tienes cuenta? Inicia sesión
-                    </Link>
-                </Box>
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Link
+                component="button"
+                type="button"
+                onClick={() => navigate('/login')}
+                sx={{
+                color: theme.colors.textSecondary,
+                textDecoration: 'none',
+                backgroundColor: 'transparent',
+                border: 'none',
+                padding: '4px 8px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                borderRadius: '4px',
+                transition: 'all 0.3s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                '&:hover': {
+                    color: theme.colors.primary,
+                    textDecoration: 'none',
+                    backgroundColor: theme.isDarkMode ? 'rgba(255, 167, 38, 0.08)' : 'rgba(230, 126, 34, 0.08)',
+                    transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                    transform: 'translateY(0)',
+                },
+                '&:focus-visible': {
+                    outline: `2px solid ${theme.colors.primary}`,
+                    outlineOffset: '2px',
+                }
+                }}
+            >
+                ¿Ya tienes cuenta? <Box component="span" sx={{ color: theme.colors.primary, fontWeight: 600 }}>Inicia sesión</Box>
+            </Link>
+            </Box>
             </Box>
         </Box>
     );
