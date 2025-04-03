@@ -141,7 +141,7 @@ const Contacto = () => {
       {/* Encabezado */}
       <div className="contacto-header" style={{ position: 'relative' }}>
         <div style={{
-          height: '200px',
+          height: '150px',
           background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.primaryDark} 100%)`,
           display: 'flex',
           flexDirection: 'column',

@@ -643,16 +643,29 @@ app.put('/api/user/:userId/plan', async (req, res) => {
 
 
 // Endpoint para guardar los mensajes
-app.post('/api/save-messages', (req, res) => {
-  const fs = require('fs');
-  const path = require('path');
-  
-  const filePath = path.join(__dirname, 'messages.json');
-  fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
-  
-  res.json({ success: true });
-});
+// En tu backend (server.js o similar)
+const fs = require('fs');
+const path = require('path');
 
+app.post('/api/save-messages', (req, res) => {
+  try {
+    const messages = req.body.messages;
+    const filePath = path.join(__dirname, 'data', 'messages.json');
+    
+    // Crear directorio si no existe
+    if (!fs.existsSync(path.dirname(filePath))) {
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    }
+    
+    // Escribir en el archivo
+    fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving messages:', error);
+    res.status(500).json({ success: false, error: 'Error saving messages' });
+  }
+});
 
 
 
