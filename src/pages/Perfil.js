@@ -26,7 +26,6 @@ import {
 import { 
   Email, 
   Person, 
-  Security, 
   DarkMode, 
   LightMode,
   ArrowBack,
@@ -36,8 +35,7 @@ import {
   Diamond,
   Edit,
   Add,
-  Remove,
-  Search
+  Remove
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
