@@ -114,8 +114,8 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
    npm install bcrypt bcryptjs chalk concurrently
    ```
 
+![image](https://github.com/user-attachments/assets/c440b74a-ef0d-4cb6-be2a-edf3495b5acb)
 
-![image](https://github.com/user-attachments/assets/e31e6204-56b4-4b4a-9053-ca17c0352960)
 
 
 ## 🗃 Configuración de la Base de Datos
@@ -196,10 +196,8 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
 │   ├── App.js
 │   ├── index.css
 │   ├── index.js
-│   ├── reportWebVitals.js
-│   └── setupTests.js
+│   └── reportWebVitals.js
 ├── .gitignore
-├── package-lock.json
 ├── package.json
 ├── README.md
 ├── server.js
