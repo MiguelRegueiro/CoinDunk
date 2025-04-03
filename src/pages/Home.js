@@ -145,7 +145,6 @@ const Home = () => {
   // Efecto principal con cancelación de petición
   useEffect(() => {
     const controller = new AbortController();
-    const signal = controller.signal;
 
     const fetchData = async () => {
       await fetchUserData();
