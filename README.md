@@ -21,7 +21,6 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
 
 🔹 Predicciones en tiempo real con algoritmos avanzados. Pronósticos precisos en 24h, 1 semana y 1 mes  
 🔹 Sistema de suscripción por niveles (Básico, Pro, Premium)  
-🔹 Gestión de portafolios personalizados  
 🔹 Visualización interactiva de datos  
 🔹 Temas claro/oscuro    
 
@@ -45,7 +44,7 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
 
 ### Visualización
 - Gráficos interactivos con Chart.js
-- Diseño completamente responsive
+- Diseño responsive
 - Tema claro/oscuro adaptable
 
 ## 💻 Tecnologías Utilizadas
@@ -113,7 +112,6 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
    ```bash
    npm install express mysql2 cors body-parser dotenv jsonwebtoken
    npm install bcrypt bcryptjs chalk concurrently
-
    ```
 
 
@@ -132,7 +130,7 @@ CoinDunk es una plataforma avanzada para predicción de criptomonedas que ofrece
 3. Los datos iniciales incluyen:
    - 3 planes de suscripción
    - 22 criptomonedas populares
-   - 3 usuarios de ejemplo (user1, user2, user3)
+   - 3 usuarios de ejemplo (user, user2, user3)
 
 ![image](https://github.com/user-attachments/assets/73d4a3bd-dbf4-40f3-b71c-f70f94fff916)
 
