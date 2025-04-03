@@ -642,6 +642,17 @@ app.put('/api/user/:userId/plan', async (req, res) => {
 
 
 
+// Endpoint para guardar los mensajes
+app.post('/api/save-messages', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  const filePath = path.join(__dirname, 'messages.json');
+  fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
+  
+  res.json({ success: true });
+});
+
 
 
 
