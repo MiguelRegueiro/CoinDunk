@@ -334,41 +334,58 @@ const Contacto = () => {
 
           {/* Botón para exportar mensajes */}
           {messages.length > 0 && (
-            <div style={{ marginTop: '30px' }}>
-              <button
-                onClick={exportMessages}
+          <div style={{ marginTop: '30px' }}>
+            <button
+              onClick={exportMessages}
+              style={{
+                backgroundColor: theme.colors.secondary,
+                color: theme.colors.textOnSecondary,
+                padding: '12px 20px',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                boxShadow: `0 2px 8px ${theme.colors.secondary}40`
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = theme.colors.secondaryHover;
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = `0 4px 12px ${theme.colors.secondary}60`;
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = theme.colors.secondary;
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = `0 2px 8px ${theme.colors.secondary}40`;
+              }}
+            >
+              <svg 
+                width="18" 
+                height="18" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
                 style={{
-                  backgroundColor: theme.colors.secondary,
-                  color: theme.colors.textOnPrimary,
-                  padding: '10px 15px',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.9rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = theme.colors.secondaryHover;
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = theme.colors.secondary;
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Exportar mensajes ({messages.length})
-              </button>
-            </div>
-          )}
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Exportar mensajes ({messages.length})
+            </button>
+          </div>
+        )}
         </div>
 
         {/* Formulario de contacto */}
